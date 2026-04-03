@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Addi — Originations flow — Banner to prompt TYC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #1C1C1E;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .proto-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    /* ── Phone shell ── */
+    .phone {
+      width: 390px;
+      background: #fff;
+      border-radius: 44px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 24px 80px rgba(0,0,0,0.6);
+      position: relative;
+    }
+
+    /* ── Status bar ── */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1A1B2E;
+      background: #fff;
+    }
+    .sb-right { display: flex; gap: 5px; align-items: center; }
+
+    /* ── Browser bar ── */
+    .browser-bar {
+      background: #f2f3f5;
+      margin: 0 12px 4px;
+      border-radius: 10px;
+      padding: 7px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .browser-bar svg { flex-shrink: 0; }
+    .browser-url {
+      font-size: 12px;
+      color: #4a5561;
+      font-weight: 500;
+      flex: 1;
+      text-align: center;
+    }
+
+    /* ── Screen container ── */
+    .screen {
+      display: none;
+      flex-direction: column;
+      min-height: 720px;
+      animation: fadeSlide 0.22s ease-out;
+    }
+    .screen.active { display: flex; }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateX(18px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fadeSlideBack {
+      from { opacity: 0; transform: translateX(-18px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .screen.back { animation: fadeSlideBack 0.22s ease-out; }
+
+    /* ── Screen header ── */
+    .scr-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 10px 20px 12px;
+    }
+    .back-btn {
+      position: absolute;
+      left: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      color: #1c67d8;
+      display: flex;
+      align-items: center;
+    }
+    .close-btn {
+      position: absolute;
+      right: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      color: #4a5561;
+      display: flex;
+      align-items: center;
+    }
+    .addi-logo {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1c67d8;
+      letter-spacing: -0.5px;
+    }
+
+    /* ── Screen body ── */
+    .scr-body {
+      flex: 1;
+      padding: 0 20px 24px;
+      overflow-y: auto;
+    }
+
+    /* ── Typography ── */
+    .title-lg {
+      font-size: 22px;
+      font-weight: 700;
+      color: #121d28;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+    .title-md {
+      font-size: 18px;
+      font-weight: 700;
+      color: #121d28;
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #4a5561;
+      line-height: 1.5;
+    }
+    .label-sm {
+      font-size: 12px;
+      color: #a8b2ba;
+      font-weight: 500;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: #dde5eb;
+      margin: 14px 0;
+    }
+
+    /* ── Product price header (S0) ── */
+    .price-header {
+      padding: 8px 20px 0;
+    }
+    .merchant-tag {
+      font-size: 12px;
+      color: #a8b2ba;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    .big-price {
+      font-size: 28px;
+      font-weight: 700;
+      color: #121d28;
+      letter-spacing: -0.5px;
+    }
+    .payment-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #121d28;
+      margin: 16px 0 10px;
+    }
+
+    /* ── Section heading ── */
+    .section-heading {
+      font-size: 11px;
+      font-weight: 700;
+      color: #a8b2ba;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 16px 0 8px;
+    }
+
+    /* ── Installment rows ── */
+    .install-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border: 1.5px solid transparent;
+      margin-bottom: 6px;
+    }
+    .install-row:hover { background: #f5f8ff; }
+    .install-row.selected {
+      border-color: #1c67d8;
+      background: #f0f6ff;
+    }
+    .install-left { display: flex; align-items: center; gap: 10px; }
+    .radio-dot {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid #dde5eb;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .install-row.selected .radio-dot {
+      border-color: #1c67d8;
+      background: #1c67d8;
+    }
+    .install-row.selected .radio-dot::after {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #fff;
+    }
+    .install-name { font-size: 14px; font-weight: 600; color: #121d28; }
+    .install-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #16a34a;
+      background: #dcfce7;
+      padding: 2px 7px;
+      border-radius: 99px;
+    }
+    .install-amount { font-size: 15px; font-weight: 700; color: #121d28; }
+
+    /* ── Installment expanded breakdown ── */
+    .install-breakdown {
+      background: #f5f8ff;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: -2px 0 6px;
+      display: none;
+    }
+    .install-breakdown.open { display: block; }
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #4a5561;
+      padding: 3px 0;
+    }
+    .breakdown-row.total {
+      font-weight: 700;
+      color: #121d28;
+      border-top: 1px solid #dde5eb;
+      margin-top: 6px;
+      padding-top: 8px;
+    }
+
+    /* ── Grande section ── */
+    .grande-section {
+      background: #f9fafb;
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 8px;
+    }
+    .grande-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #4a5561;
+      margin-bottom: 10px;
+    }
+    .grande-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #edf0f3;
+    }
+    .grande-row:last-child { border-bottom: none; }
+    .grande-cuota { font-size: 14px; font-weight: 600; color: #121d28; }
+    .grande-amount { font-size: 14px; font-weight: 600; color: #121d28; }
+
+    /* ── Legal footer on S0 ── */
+    .legal-text {
+      font-size: 11px;
+      color: #a8b2ba;
+      line-height: 1.5;
+      margin-top: 16px;
+    }
+    .legal-text a { color: #1c67d8; text-decoration: underline; }
+
+    /* ── Primary CTA button ── */
+    .btn-primary {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background: #1c67d8;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.15s, transform 0.1s;
+      font-family: 'Outfit', sans-serif;
+      margin-top: 20px;
+    }
+    .btn-primary:hover { background: #1555be; }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled {
+      background: #dde5eb;
+      color: #a8b2ba;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── S1: Confirm purchase ── */
+    .merchant-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #a8b2ba;
+      margin-bottom: 2px;
+    }
+    .cuota-label {
+      font-size: 13px;
+      color: #4a5561;
+      margin-bottom: 4px;
+    }
+    .cuota-amount-big {
+      font-size: 32px;
+      font-weight: 700;
+      color: #121d28;
+      letter-spacing: -1px;
+    }
+    .zero-interest {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: #16a34a;
+      background: #dcfce7;
+      padding: 3px 8px;
+      border-radius: 99px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .details-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 10px 0;
+    }
+    .details-toggle-label { font-size: 14px; font-weight: 600; color: #1c67d8; }
+    .details-toggle-chevron {
+      transition: transform 0.2s;
+      color: #1c67d8;
+    }
+    .details-toggle-chevron.open { transform: rotate(180deg); }
+    .details-panel {
+      display: none;
+      background: #f5f8ff;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+    .details-panel.open { display: block; }
+    .change-link {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1c67d8;
+      cursor: pointer;
+      text-decoration: underline;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+    .date-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 0;
+      border-top: 1px solid #dde5eb;
+    }
+    .date-row-text { font-size: 13px; color: #4a5561; }
+
+    /* ── Checkboxes ── */
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-top: 1px solid #dde5eb;
+      cursor: pointer;
+    }
+    .cb-box {
+      width: 20px; height: 20px;
+      border-radius: 5px;
+      border: 2px solid #dde5eb;
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .checkbox-row.checked .cb-box {
+      background: #1c67d8;
+      border-color: #1c67d8;
+    }
+    .cb-text { font-size: 12px; color: #4a5561; line-height: 1.5; }
+    .cb-text a { color: #1c67d8; }
+    .secure-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 14px 0;
+      font-size: 12px;
+      color: #a8b2ba;
+      font-weight: 500;
+    }
+
+    /* ── S2: Approved ── */
+    .approved-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #dcfce7;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .approved-badge-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #166534;
+    }
+    .new-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #e6f5ff;
+      color: #1c67d8;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 99px;
+      margin-bottom: 10px;
+    }
+    .tyc-promo-banner {
+      background: linear-gradient(135deg, #1c67d8 0%, #1042a8 100%);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .tyc-promo-text {
+      flex: 1;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.4;
+    }
+    .tyc-promo-img {
+      width: 56px; height: 56px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 0;
+      border-top: 1px solid #dde5eb;
+    }
+    .info-row-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: #f0f6ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .info-row-text { font-size: 13px; color: #4a5561; line-height: 1.5; flex: 1; }
+    .info-row-text strong { color: #121d28; }
+    .ghost-cta {
+      font-size: 13px;
+      color: #a8b2ba;
+      text-align: center;
+      padding: 10px 0;
+      cursor: pointer;
+    }
+    .ghost-cta span { color: #1c67d8; text-decoration: underline; }
+
+    /* ── Browser nav bar (bottom) ── */
+    .browser-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 10px 20px 16px;
+      border-top: 1px solid #edf0f3;
+    }
+    .browser-nav button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      color: #a8b2ba;
+      display: flex;
+      align-items: center;
+    }
+    .browser-nav button.active { color: #121d28; }
+
+    /* ── S3: RCL intro ── */
+    .rcl-header {
+      padding: 20px 20px 0;
+    }
+    .rcl-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #121d28;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+    .rcl-subtitle {
+      font-size: 14px;
+      color: #4a5561;
+      line-height: 1.55;
+      margin-bottom: 24px;
+    }
+    .rcl-features { padding: 0 20px; }
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid #edf0f3;
+    }
+    .feature-item:last-child { border-bottom: none; }
+    .feature-icon {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      background: #f0f6ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .feature-text { flex: 1; }
+    .feature-title { font-size: 14px; font-weight: 700; color: #121d28; margin-bottom: 2px; }
+    .feature-desc { font-size: 13px; color: #4a5561; line-height: 1.45; }
+
+    .reglamento-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border-top: 1px solid #edf0f3;
+      border-bottom: 1px solid #edf0f3;
+      cursor: pointer;
+    }
+    .reglamento-label { font-size: 14px; font-weight: 600; color: #1c67d8; }
+    .reglamento-note {
+      font-size: 12px;
+      color: #a8b2ba;
+      padding: 0 20px 16px;
+    }
+    .rcl-cta { padding: 0 20px 24px; }
+
+    /* ── S4: Success ── */
+    .success-screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 32px;
+      text-align: center;
+      gap: 16px;
+    }
+    .success-icon {
+      font-size: 72px;
+      line-height: 1;
+      margin-bottom: 8px;
+      animation: bounceIn 0.5s ease-out;
+    }
+    @keyframes bounceIn {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    .success-title {
+      font-size: 26px;
+      font-weight: 700;
+      color: #121d28;
+      line-height: 1.25;
+    }
+    .success-subtitle {
+      font-size: 15px;
+      color: #4a5561;
+    }
+    .success-cta { width: 100%; margin-top: 8px; }
+
+    /* ── Dot nav ── */
+    .dot-nav {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 0 8px;
+    }
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #dde5eb;
+      transition: background 0.2s, width 0.2s;
+    }
+    .dot.active {
+      background: #1c67d8;
+      width: 18px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="proto-label">Originations flow — Banner to prompt TYC</div>
+
+<div class="phone">
+
+  <!-- ════ STATUS BAR ════ -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="sb-right">
+      <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><rect x="0" y="3" width="3" height="8" rx="1" fill="#1A1B2E" opacity="0.4"/><rect x="4" y="2" width="3" height="9" rx="1" fill="#1A1B2E" opacity="0.6"/><rect x="8" y="0" width="3" height="11" rx="1" fill="#1A1B2E"/><rect x="13" y="1" width="3" height="9" rx="1.5" fill="#1A1B2E"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="#1A1B2E"><path d="M8 2.4C5.6 2.4 3.4 3.4 1.8 5L0 3.2C2.1 1.2 4.9 0 8 0s5.9 1.2 8 3.2L14.2 5C12.6 3.4 10.4 2.4 8 2.4z" opacity=".4"/><path d="M8 5.2C6.4 5.2 4.9 5.8 3.8 6.8L2 5C3.6 3.7 5.7 2.9 8 2.9s4.4.8 6 2.1L12.2 6.8C11.1 5.8 9.6 5.2 8 5.2z" opacity=".7"/><path d="M8 8c-1 0-1.9.4-2.5 1L8 12l2.5-3C9.9 8.4 9 8 8 8z"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#1A1B2E" stroke-opacity="0.35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#1A1B2E"/><path d="M23 4v4a2 2 0 000-4z" fill="#1A1B2E" opacity="0.4"/></svg>
+    </div>
+  </div>
+
+  <!-- ════ DOT NAV ════ -->
+  <div class="dot-nav" id="dots">
+    <div class="dot active" id="d0"></div>
+    <div class="dot" id="d1"></div>
+    <div class="dot" id="d2"></div>
+    <div class="dot" id="d3"></div>
+    <div class="dot" id="d4"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 0 — Installment selector
+  ═══════════════════════════════════════════ -->
+  <div class="screen active" id="s0">
+    <!-- Browser bar -->
+    <div class="browser-bar">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a8b2ba" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      <span class="browser-url">exopic.com</span>
+    </div>
+    <!-- Header -->
+    <div class="scr-header">
+      <span class="addi-logo">Addi</span>
+      <button class="close-btn" onclick="go(0)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <!-- Price -->
+    <div class="price-header">
+      <div class="merchant-tag">Alkosto</div>
+      <div class="big-price">$ 247.500</div>
+      <div class="payment-label">¿Cómo quieres pagar?</div>
+    </div>
+
+    <div class="scr-body">
+      <div class="section-heading">Cupo</div>
+
+      <!-- 1 cuota selected -->
+      <div class="install-row selected" id="row1" onclick="selRow(1)">
+        <div class="install-left">
+          <div class="radio-dot"></div>
+          <span class="install-name">1 cuota</span>
+          <span class="install-badge">0% interés</span>
+        </div>
+        <span class="install-amount">$ 247.500</span>
+      </div>
+      <div class="install-breakdown open" id="bd1">
+        <div class="breakdown-row"><span>Capital</span><span>$ 247.500</span></div>
+        <div class="breakdown-row"><span>Intereses</span><span>$ 0</span></div>
+        <div class="breakdown-row total"><span>Total cuota</span><span>$ 247.500</span></div>
+      </div>
+
+      <div class="install-row" id="row3" onclick="selRow(3)">
+        <div class="install-left">
+          <div class="radio-dot"></div>
+          <span class="install-name">3 cuotas</span>
+        </div>
+        <span class="install-amount">$ 85.900</span>
+      </div>
+      <div class="install-breakdown" id="bd3">
+        <div class="breakdown-row"><span>Capital</span><span>$ 82.500</span></div>
+        <div class="breakdown-row"><span>Intereses</span><span>$ 3.400</span></div>
+        <div class="breakdown-row total"><span>Total cuota</span><span>$ 85.900</span></div>
+      </div>
+
+      <div class="install-row" id="row6" onclick="selRow(6)">
+        <div class="install-left">
+          <div class="radio-dot"></div>
+          <span class="install-name">6 cuotas</span>
+        </div>
+        <span class="install-amount">$ 44.800</span>
+      </div>
+      <div class="install-breakdown" id="bd6">
+        <div class="breakdown-row"><span>Capital</span><span>$ 41.250</span></div>
+        <div class="breakdown-row"><span>Intereses</span><span>$ 3.550</span></div>
+        <div class="breakdown-row total"><span>Total cuota</span><span>$ 44.800</span></div>
+      </div>
+
+      <!-- Grande section -->
+      <div class="grande-section">
+        <div class="grande-title">Crédito Grande</div>
+        <div class="grande-row">
+          <span class="grande-cuota">9 cuotas</span>
+          <span class="grande-amount">$ 31.200</span>
+        </div>
+        <div class="grande-row">
+          <span class="grande-cuota">12 cuotas</span>
+          <span class="grande-amount">$ 24.600</span>
+        </div>
+        <div class="grande-row">
+          <span class="grande-cuota">18 cuotas</span>
+          <span class="grande-amount">$ 17.900</span>
+        </div>
+        <div class="grande-row">
+          <span class="grande-cuota">24 cuotas</span>
+          <span class="grande-amount">$ 14.400</span>
+        </div>
+      </div>
+
+      <p class="legal-text">Los montos y cuotas pueden estar sujetos a <a href="#">Términos y Condiciones</a>.</p>
+
+      <button class="btn-primary" onclick="go(1)">Siguiente</button>
+    </div>
+
+    <!-- Browser nav -->
+    <div class="browser-nav">
+      <button><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m7-7-7 7 7 7"/></svg></button>
+      <button class="active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      <button><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg></button>
+      <button><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 1 — Confirm purchase + T&C
+  ═══════════════════════════════════════════ -->
+  <div class="screen" id="s1">
+    <div class="browser-bar">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a8b2ba" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      <span class="browser-url">exopic.com</span>
+    </div>
+    <div class="scr-header">
+      <button class="back-btn" onclick="goBack(0)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+      </button>
+      <span class="addi-logo">Addi</span>
+      <button class="close-btn" onclick="go(0)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="scr-body">
+      <div class="title-md" style="margin-bottom:16px">Confirma tu compra con Cupo</div>
+
+      <div class="merchant-name">Alkosto</div>
+      <div class="cuota-label">5 cuotas mensuales de</div>
+      <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:14px">
+        <span class="cuota-amount-big">$ 49.500</span>
+        <span class="zero-interest">Sin deuda</span>
+      </div>
+
+      <!-- Ver detalles expandable -->
+      <div class="details-toggle" onclick="toggleDetails()">
+        <span class="details-toggle-label">Ver detalles</span>
+        <svg class="details-toggle-chevron" id="det-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+      </div>
+      <div class="details-panel" id="det-panel">
+        <div class="breakdown-row"><span>Capital</span><span>$ 45.000</span></div>
+        <div class="breakdown-row"><span>Intereses</span><span>$ 4.500</span></div>
+        <div class="breakdown-row total"><span>Total cuota</span><span>$ 49.500</span></div>
+      </div>
+
+      <span class="change-link" onclick="goBack(0)">Cambiar cuotas</span>
+
+      <!-- Date row -->
+      <div class="date-row">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        <span class="date-row-text">Primera cuota: <strong>01 de Dic. de 2024</strong></span>
+      </div>
+
+      <!-- T&C checkbox 1 -->
+      <div class="checkbox-row" id="cb1" onclick="toggleCb('cb1')">
+        <div class="cb-box" id="cb1-box">
+          <svg style="display:none" id="cb1-check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <span class="cb-text">Al ingresar confirmo que he leído y acepto los <a onclick="event.stopPropagation()">términos del contrato de crédito</a> y <a onclick="event.stopPropagation()">condiciones del servicio</a> de la compra, las políticas de privacidad y tratamiento de datos.</span>
+      </div>
+
+      <!-- T&C checkbox 2 -->
+      <div class="checkbox-row" id="cb2" onclick="toggleCb('cb2')">
+        <div class="cb-box" id="cb2-box">
+          <svg style="display:none" id="cb2-check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <span class="cb-text">Si la compra está destinada al desarrollo de actividades productivas, entienda presente declaración como <a onclick="event.stopPropagation()">contrato de crédito empresarial</a>.</span>
+      </div>
+
+      <button class="btn-primary" id="confirm-btn" onclick="go(2)" disabled>Confirmar</button>
+
+      <div class="secure-footer">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        Pago seguro
+      </div>
+    </div>
+
+    <div class="browser-nav">
+      <button onclick="goBack(0)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m7-7-7 7 7 7"/></svg></button>
+      <button class="active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      <button><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg></button>
+      <button><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 2 — Purchase approved + TYC promo
+  ═══════════════════════════════════════════ -->
+  <div class="screen" id="s2">
+    <div class="browser-bar">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a8b2ba" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      <span class="browser-url">co.addi.com</span>
+    </div>
+    <div class="scr-header">
+      <button class="back-btn" onclick="goBack(1)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+      </button>
+      <span class="addi-logo">Addi</span>
+      <button class="close-btn" onclick="go(0)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="scr-body">
+      <!-- Approved badge -->
+      <div class="approved-badge">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+        <span class="approved-badge-text">Tu compra fue aprobada</span>
+      </div>
+
+      <span class="new-badge">✦ Nuevo</span>
+
+      <!-- TYC Promo banner -->
+      <div class="tyc-promo-banner" onclick="go(3)">
+        <div class="tyc-promo-text">
+          ¡Acepta los nuevos Términos y tu información para mejorar tu Cupo! Te toma 2 minutos.
+        </div>
+        <div class="tyc-promo-img">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+        </div>
+      </div>
+
+      <!-- Calendar info row -->
+      <div class="info-row">
+        <div class="info-row-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </div>
+        <div class="info-row-text">
+          <strong>Primera cuota: 01 de Dic. de 2024.</strong> Consulta tus pagos en la app.
+        </div>
+      </div>
+
+      <!-- Doc info row -->
+      <div class="info-row">
+        <div class="info-row-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>
+        </div>
+        <div class="info-row-text">
+          Revisa toda la información de tu compra y envío en <strong>Addi Shop</strong>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="go(3)">Ver detalles de mi compra</button>
+
+      <div class="ghost-cta" style="margin-top:10px">
+        En 28 días verás los detalles o puedes <span>verlos ahora</span>
+      </div>
+    </div>
+
+    <div class="browser-nav">
+      <button onclick="goBack(1)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m7-7-7 7 7 7"/></svg></button>
+      <button class="active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      <button><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg></button>
+      <button><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 3 — RCL intro / T&C acceptance
+  ═══════════════════════════════════════════ -->
+  <div class="screen" id="s3">
+    <div class="browser-bar">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a8b2ba" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      <span class="browser-url">co.addi.com</span>
+    </div>
+    <div class="scr-header">
+      <button class="back-btn" onclick="goBack(2)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+      </button>
+      <span class="addi-logo">Addi</span>
+      <button class="close-btn" onclick="go(0)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="rcl-header">
+      <div class="rcl-title">Cupo ahora tiene un límite de $ 5.000.000</div>
+      <div class="rcl-subtitle">Tu crédito Addi está evolucionando. Ahora tendrás una línea de crédito rotativa. Compra más fácil y paga una vez al mes.</div>
+    </div>
+
+    <div class="rcl-features">
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="feature-text">
+          <div class="feature-title">Tus compras en una sola línea</div>
+          <div class="feature-desc">Se agrupan más parecido a una tarjeta de crédito. Más fácil de seguir.</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </div>
+        <div class="feature-text">
+          <div class="feature-title">Un pago en la misma fecha</div>
+          <div class="feature-desc">Tu fecha de pago es el 20 de cada mes. Todo en un solo cobro.</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="feature-text">
+          <div class="feature-title">Tus montos y cuotas no cambian</div>
+          <div class="feature-desc">Tu saldo gana intereses todos los días. Consulta la rentabilidad cuando quieras en la app.</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        </div>
+        <div class="feature-text">
+          <div class="feature-title">Tasa de interés del 21% este mes</div>
+          <div class="feature-desc">Consulta la rentabilidad cuando quieras en la app.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reglamento-row" onclick="go(3)">
+      <span class="reglamento-label">Reglamento de tu Cupo</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+    <div class="reglamento-note">Al hacer clic confirmarás que aceptas el Reglamento del Cuenta de Ahorro.</div>
+
+    <div class="rcl-cta">
+      <button class="btn-primary" onclick="go(4)">Aceptar y continuar</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 4 — Success
+  ═══════════════════════════════════════════ -->
+  <div class="screen" id="s4">
+    <div class="success-screen">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">¡Felicidades!</div>
+      <button class="btn-primary success-cta" onclick="go(0)">Ir a mi Cupo</button>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+  let currentScreen = 0;
+  const cb1State = { checked: false };
+  const cb2State = { checked: false };
+
+  function go(n) {
+    const prev = document.getElementById('s' + currentScreen);
+    const next = document.getElementById('s' + n);
+    if (prev) prev.classList.remove('active', 'back');
+    if (next) {
+      next.classList.remove('back');
+      next.classList.add('active');
+    }
+    currentScreen = n;
+    updDots(n);
+  }
+
+  function goBack(n) {
+    const prev = document.getElementById('s' + currentScreen);
+    const next = document.getElementById('s' + n);
+    if (prev) prev.classList.remove('active', 'back');
+    if (next) {
+      next.classList.add('back', 'active');
+    }
+    currentScreen = n;
+    updDots(n);
+  }
+
+  function updDots(n) {
+    for (let i = 0; i <= 4; i++) {
+      const d = document.getElementById('d' + i);
+      if (d) d.classList.toggle('active', i === n);
+    }
+  }
+
+  function selRow(n) {
+    ['row1','row3','row6'].forEach(id => {
+      document.getElementById(id).classList.remove('selected');
+    });
+    ['bd1','bd3','bd6'].forEach(id => {
+      document.getElementById(id).classList.remove('open');
+    });
+    document.getElementById('row' + n).classList.add('selected');
+    document.getElementById('bd' + n).classList.add('open');
+  }
+
+  function toggleDetails() {
+    const panel = document.getElementById('det-panel');
+    const chev = document.getElementById('det-chevron');
+    const open = panel.classList.toggle('open');
+    chev.classList.toggle('open', open);
+  }
+
+  function toggleCb(id) {
+    const row = document.getElementById(id);
+    const box = document.getElementById(id + '-box');
+    const check = document.getElementById(id + '-check');
+    const isChecked = row.classList.toggle('checked');
+    if (check) check.style.display = isChecked ? 'block' : 'none';
+
+    if (id === 'cb1') cb1State.checked = isChecked;
+    if (id === 'cb2') cb2State.checked = isChecked;
+
+    // Enable confirm only when cb1 is checked (cb2 is optional)
+    document.getElementById('confirm-btn').disabled = !cb1State.checked;
+  }
+</script>
+
+</body>
+</html>
