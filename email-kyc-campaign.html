@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Addi — Email Campaign — KYC Completion</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--b:#1c67d8;--bl:#e6f5ff;--bg:#fbfcfd;--bgs:#eff3f5;--w:#fff;--ts:#121d28;--t:#4a5561;--tw:#a8b2ba;--bd:#dde5eb;--ok:#16a34a;--okl:#dcfce7;--r:16px;--rs:12px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Outfit',sans-serif;background:#1a1a2e;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:24px 16px}
+#phone{width:390px;height:844px;background:#f0f0f0;border-radius:44px;overflow:hidden;position:relative;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 24px 80px rgba(0,0,0,.6);border:8px solid #1a1a1a;flex-shrink:0}
+.s{display:none;flex-direction:column;height:100%;position:absolute;inset:0;overflow:hidden}.s.on{display:flex;animation:fi .2s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes su{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes si{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+button{font-family:'Outfit',sans-serif;cursor:pointer}
+
+/* ── Status bar ── */
+.sb{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 6px;font-size:12px;font-weight:600;color:var(--ts);background:var(--w);flex-shrink:0}
+.sb-r{display:flex;gap:5px;align-items:center}
+
+/* ── Email client nav ── */
+.en{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--w);border-bottom:1px solid var(--bd);flex-shrink:0}
+.eb{width:36px;height:36px;border-radius:10px;background:var(--bgs);border:none;display:flex;align-items:center;justify-content:center;color:var(--ts);font-size:16px}
+.et{font-size:16px;font-weight:600;color:var(--ts);flex:1}
+.ei{font-size:13px;color:var(--tw)}
+
+/* ── Inbox list ── */
+.il-wrap{flex:1;overflow-y:auto;background:var(--w)}
+.il-hdr{padding:16px 16px 8px;font-size:13px;font-weight:600;color:var(--tw);text-transform:uppercase;letter-spacing:.06em}
+.il-row{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--bgs);cursor:pointer;transition:background .15s;align-items:flex-start}
+.il-row:active{background:var(--bgs)}
+.il-row.unread .il-sender{font-weight:700;color:var(--ts)}
+.il-row.unread .il-preview{color:var(--ts)}
+.il-avatar{width:40px;height:40px;border-radius:50%;background:var(--b);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700;flex-shrink:0;margin-top:2px}
+.il-body{flex:1;min-width:0}
+.il-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.il-sender{font-size:15px;font-weight:400;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.il-time{font-size:12px;color:var(--tw);flex-shrink:0;margin-left:8px}
+.il-subject{font-size:14px;font-weight:500;color:var(--ts);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.il-preview{font-size:13px;color:var(--tw);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.il-dot{width:8px;height:8px;border-radius:50%;background:var(--b);flex-shrink:0;margin-top:6px}
+
+/* ── Email view ── */
+.ev-wrap{flex:1;overflow-y:auto;background:#f5f5f5}
+.ev-subj{padding:16px 16px 12px;background:var(--w);border-bottom:1px solid var(--bd)}
+.ev-subj-t{font-size:17px;font-weight:700;color:var(--ts);line-height:1.3;margin-bottom:6px}
+.ev-meta{display:flex;align-items:center;gap:10px}
+.ev-from-av{width:32px;height:32px;border-radius:50%;background:var(--b);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0}
+.ev-from-info{flex:1}
+.ev-from-name{font-size:13px;font-weight:600;color:var(--ts)}
+.ev-from-addr{font-size:12px;color:var(--tw)}
+.ev-from-time{font-size:12px;color:var(--tw)}
+
+/* ── Email body (rendered) ── */
+.email-body{background:#f5f5f5;padding:12px}
+.email-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.email-header{background:var(--b);padding:18px 20px;display:flex;align-items:center;gap:8px}
+.email-logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:-.4px}
+.email-logo span{font-weight:300}
+.email-hero{width:100%;height:160px;object-fit:cover;background:linear-gradient(135deg,#1444b0 0%,#1c67d8 50%,#3d8ef0 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.email-hero-inner{text-align:center;padding:20px}
+.email-hero svg{margin-bottom:8px;opacity:.9}
+.email-content{padding:20px}
+.email-headline{font-size:18px;font-weight:700;color:var(--ts);line-height:1.3;margin-bottom:4px}
+.email-greeting{font-size:15px;font-weight:600;color:var(--ts);margin-bottom:12px}
+.email-body-text{font-size:14px;color:var(--t);line-height:1.55;margin-bottom:12px}
+.email-sign{font-size:14px;color:var(--t);line-height:1.5}
+.email-cta-block{background:var(--b);padding:20px;margin:0}
+.email-cta-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.3}
+.email-cta-bullets{margin-bottom:16px;display:flex;flex-direction:column;gap:6px}
+.email-cta-bullet{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:rgba(255,255,255,.9);line-height:1.4}
+.email-cta-bullet::before{content:'•';flex-shrink:0;margin-top:1px}
+.email-cta-btn{display:block;background:#fff;color:var(--b);text-align:center;padding:12px 20px;border-radius:var(--rs);font-size:15px;font-weight:700;border:none;width:100%;cursor:pointer;transition:opacity .15s}
+.email-cta-btn:active{opacity:.85}
+.email-info-row{display:flex;gap:12px;padding:16px 20px;border-bottom:1px solid var(--bgs);align-items:flex-start}
+.email-info-icon{width:32px;height:32px;border-radius:8px;background:var(--bl);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.email-info-title{font-size:13px;font-weight:600;color:var(--ts);margin-bottom:2px}
+.email-info-text{font-size:12px;color:var(--t);line-height:1.4;margin-bottom:4px}
+.email-info-link{font-size:12px;font-weight:600;color:var(--b)}
+.email-footer{padding:16px 20px;text-align:center;background:var(--bgs)}
+.email-footer-logo{font-size:16px;font-weight:800;color:var(--ts);letter-spacing:-.3px;margin-bottom:10px}
+.email-footer-logo span{font-weight:300}
+.email-footer-social{display:flex;justify-content:center;gap:12px;margin-bottom:10px}
+.email-footer-icon{width:28px;height:28px;border-radius:50%;background:var(--bd);display:flex;align-items:center;justify-content:center}
+.email-footer-text{font-size:11px;color:var(--tw);line-height:1.5;margin-bottom:6px}
+.email-footer-links{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.email-footer-link{font-size:11px;color:var(--b)}
+
+/* ── Deep-link landing ── */
+.dl-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;background:var(--bg);text-align:center;gap:20px}
+.dl-icon{width:80px;height:80px;border-radius:24px;background:var(--b);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(28,103,216,.35);animation:si .4s ease}
+.dl-title{font-size:22px;font-weight:700;color:var(--ts);line-height:1.2;letter-spacing:-.44px}
+.dl-sub{font-size:15px;color:var(--t);line-height:1.5}
+.dl-progress{width:100%;background:var(--bgs);border-radius:100px;height:6px;overflow:hidden;margin-top:4px}
+.dl-bar{height:100%;background:var(--b);border-radius:100px;animation:load 1.8s ease forwards}
+@keyframes load{from{width:0}to{width:100%}}
+.bp{width:100%;padding:14px 24px;background:var(--b);color:#fff;border:none;border-radius:var(--rs);font-size:16px;font-weight:600;letter-spacing:-.16px;transition:opacity .15s}
+.bp:active{opacity:.85}
+.bo{width:100%;padding:14px 24px;background:transparent;color:var(--b);border:1.5px solid var(--b);border-radius:var(--rs);font-size:16px;font-weight:600;margin-top:8px}
+
+/* ── Dots ── */
+#dots{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);display:flex;gap:3px;z-index:50;padding:3px 5px;background:rgba(0,0,0,.15);border-radius:6px}
+.dot{width:5px;height:5px;border-radius:50%;transition:all .2s;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="phone">
+
+<!-- ══════════════════════════════════════
+     S0 — EMAIL INBOX
+══════════════════════════════════════ -->
+<div id="s0" class="s on" style="background:var(--w)">
+  <!-- Status bar -->
+  <div class="sb">
+    <span>9:41</span>
+    <div class="sb-r">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1" opacity=".4"/><rect x="4.5" y="2" width="3" height="10" rx="1" opacity=".6"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="1" width="2.5" height="10" rx="1"/></svg>
+      <svg width="16" height="12" viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1s3.6-1 9-1 9 1 9 1"/><path d="M4 5s2-1 6-1 6 1 6 1"/><path d="M7 9s1-.5 3-.5 3 .5 3 .5"/><circle cx="10" cy="13" r="1" fill="currentColor" stroke="none"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".35"/><rect x="23.5" y="3.5" width="1.5" height="5" rx=".75" fill="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/></svg>
+    </div>
+  </div>
+  <!-- Email app nav -->
+  <div class="en">
+    <div class="et">Bandeja de entrada</div>
+    <div style="width:32px;height:32px;border-radius:50%;background:var(--bl);display:flex;align-items:center;justify-content:center">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </div>
+  </div>
+  <!-- Inbox list -->
+  <div class="il-wrap">
+    <div class="il-hdr">Hoy</div>
+    <!-- UNREAD — target email -->
+    <div class="il-row unread" onclick="go(1)" style="background:#f0f6ff">
+      <div class="il-dot" style="margin-top:8px"></div>
+      <div class="il-avatar" style="font-size:11px;font-weight:700;letter-spacing:-.5px">A</div>
+      <div class="il-body">
+        <div class="il-top">
+          <span class="il-sender">Addi</span>
+          <span class="il-time">10:24</span>
+        </div>
+        <div class="il-subject">Completa tu verificación y activa tu Cupo</div>
+        <div class="il-preview">Hola Lucho, solo te falta un paso para usar tu crédito…</div>
+      </div>
+    </div>
+    <!-- Other (read) emails for context -->
+    <div class="il-row">
+      <div style="width:8px;flex-shrink:0"></div>
+      <div class="il-avatar" style="background:#4a5561">B</div>
+      <div class="il-body">
+        <div class="il-top"><span class="il-sender">Bancolombia</span><span class="il-time">8:15</span></div>
+        <div class="il-subject">Extracto de cuenta disponible</div>
+        <div class="il-preview">Tu extracto del mes de marzo ya está disponible para…</div>
+      </div>
+    </div>
+    <div class="il-hdr" style="margin-top:4px">Ayer</div>
+    <div class="il-row">
+      <div style="width:8px;flex-shrink:0"></div>
+      <div class="il-avatar" style="background:#e85d04">A</div>
+      <div class="il-body">
+        <div class="il-top"><span class="il-sender">Alkosto</span><span class="il-time">Mar 3</span></div>
+        <div class="il-subject">¡Tu pedido ha sido enviado!</div>
+        <div class="il-preview">Tu Samsung Galaxy A55 está en camino. Haz clic para…</div>
+      </div>
+    </div>
+    <div class="il-row">
+      <div style="width:8px;flex-shrink:0"></div>
+      <div class="il-avatar" style="background:#2d6a4f">E</div>
+      <div class="il-body">
+        <div class="il-top"><span class="il-sender">Equipo Nómina</span><span class="il-time">Mar 3</span></div>
+        <div class="il-subject">Pago de nómina procesado</div>
+        <div class="il-preview">Se ha procesado tu pago correspondiente al período…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     S1 — EMAIL OPEN
+══════════════════════════════════════ -->
+<div id="s1" class="s" style="background:#f5f5f5">
+  <!-- Status bar -->
+  <div class="sb">
+    <span>9:41</span>
+    <div class="sb-r">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1" opacity=".4"/><rect x="4.5" y="2" width="3" height="10" rx="1" opacity=".6"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="1" width="2.5" height="10" rx="1"/></svg>
+      <svg width="16" height="12" viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1s3.6-1 9-1 9 1 9 1"/><path d="M4 5s2-1 6-1 6 1 6 1"/><path d="M7 9s1-.5 3-.5 3 .5 3 .5"/><circle cx="10" cy="13" r="1" fill="currentColor" stroke="none"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".35"/><rect x="23.5" y="3.5" width="1.5" height="5" rx=".75" fill="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/></svg>
+    </div>
+  </div>
+  <!-- Nav -->
+  <div class="en">
+    <button class="eb" onclick="go(0)">←</button>
+    <div class="et" style="font-size:14px">Addi</div>
+    <div class="ei">1 de 1</div>
+  </div>
+  <!-- Email content — scrollable -->
+  <div class="ev-wrap">
+    <!-- Subject + sender meta -->
+    <div class="ev-subj">
+      <div class="ev-subj-t">Completa tu verificación y activa tu Cupo</div>
+      <div class="ev-meta">
+        <div class="ev-from-av" style="font-size:10px;letter-spacing:-.4px">A</div>
+        <div class="ev-from-info">
+          <div class="ev-from-name">Addi <span style="font-weight:400;color:var(--tw)">&lt;noreply@addi.com&gt;</span></div>
+          <div class="ev-from-addr">Para: lucho@correo.com</div>
+        </div>
+        <div class="ev-from-time">10:24</div>
+      </div>
+    </div>
+
+    <!-- Rendered email -->
+    <div class="email-body">
+      <div class="email-card">
+
+        <!-- Email header -->
+        <div class="email-header">
+          <div class="email-logo">Addi</div>
+        </div>
+
+        <!-- Hero illustration -->
+        <div class="email-hero">
+          <div class="email-hero-inner">
+            <!-- Shield / ID verification icon -->
+            <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+              <circle cx="28" cy="28" r="28" fill="rgba(255,255,255,.15)"/>
+              <circle cx="28" cy="22" r="8" fill="rgba(255,255,255,.9)"/>
+              <path d="M14 42c0-7.7 6.3-14 14-14s14 6.3 14 14" fill="rgba(255,255,255,.9)"/>
+              <path d="M28 8 l12 5v10c0 7-5.4 13.5-12 15.5C21.4 36.5 16 30 16 23V13z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/>
+              <path d="M22 24l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div style="color:rgba(255,255,255,.9);font-size:13px;font-weight:600;margin-top:4px">Verificación de identidad</div>
+          </div>
+        </div>
+
+        <!-- Body copy -->
+        <div class="email-content">
+          <div class="email-headline">¡Ya casi puedes usar tu Cupo!</div>
+          <div class="email-greeting">Hola Lucho,</div>
+          <div class="email-body-text">
+            Notamos que aún no has completado la verificación de tu identidad (KYC). Este es el único paso que te falta para activar tu línea de crédito Addi y empezar a comprar cuando quieras.
+          </div>
+          <div class="email-body-text">
+            El proceso toma menos de 5 minutos y solo necesitas tu cédula a mano. Tu información está protegida y es completamente segura.
+          </div>
+          <div class="email-sign">
+            Atentamente,<br>
+            <strong>Equipo Addi</strong>
+          </div>
+        </div>
+
+        <!-- CTA block -->
+        <div class="email-cta-block">
+          <div class="email-cta-title">Completa tu verificación hoy</div>
+          <div class="email-cta-bullets">
+            <div class="email-cta-bullet">Solo necesitas tu cédula de ciudadanía</div>
+            <div class="email-cta-bullet">Proceso 100% digital — sin filas ni papeleos</div>
+            <div class="email-cta-bullet">Disponible 24/7 desde la app Addi</div>
+          </div>
+          <button class="email-cta-btn" onclick="go(2)">Completar mi verificación →</button>
+        </div>
+
+        <!-- Reglamento row -->
+        <div class="email-info-row">
+          <div class="email-info-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div>
+            <div class="email-info-title">Política de privacidad</div>
+            <div class="email-info-text">Tu información personal está protegida bajo nuestra política de privacidad y la normativa colombiana.</div>
+            <div class="email-info-link">Ver política de privacidad ›</div>
+          </div>
+        </div>
+
+        <!-- Support row -->
+        <div class="email-info-row" style="border-bottom:none">
+          <div class="email-info-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div>
+            <div class="email-info-title">¿Necesitas ayuda?</div>
+            <div class="email-info-text">Si tienes alguna duda, escríbenos a <strong style="color:var(--b)">soporte@addi.com</strong> o por WhatsApp al <strong style="color:var(--b)">+57 Addi Number</strong>.</div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+          <div class="email-footer-logo">Addi</div>
+          <div class="email-footer-social">
+            <div class="email-footer-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--t)"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </div>
+            <div class="email-footer-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--t)" stroke-width="2" stroke-linecap="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </div>
+          </div>
+          <div class="email-footer-text">La Cuenta de Ahorros es un producto ofrecido por Addi S.A. Compañía de Financiamiento.</div>
+          <div class="email-footer-links">
+            <span class="email-footer-link">Reglamento de Cupo de Ahorros</span>
+            <span class="email-footer-link">Política de tratamiento de datos</span>
+          </div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--bd);font-size:11px;color:var(--tw)">¿No quieres recibir estas comunicaciones? <span style="color:var(--b);font-weight:600">Puedes darte de baja aquí.</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     S2 — APP DEEP LINK LANDING
+══════════════════════════════════════ -->
+<div id="s2" class="s" style="background:var(--bg)">
+  <div class="sb" style="background:var(--bg)">
+    <span>9:41</span>
+    <div class="sb-r">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="var(--ts)"><rect x="0" y="3" width="3" height="9" rx="1" opacity=".4"/><rect x="4.5" y="2" width="3" height="10" rx="1" opacity=".6"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="1" width="2.5" height="10" rx="1"/></svg>
+      <svg width="16" height="12" viewBox="0 0 20 14" fill="none" stroke="var(--ts)" stroke-width="1.5"><path d="M1 1s3.6-1 9-1 9 1 9 1"/><path d="M4 5s2-1 6-1 6 1 6 1"/><path d="M7 9s1-.5 3-.5 3 .5 3 .5"/><circle cx="10" cy="13" r="1" fill="var(--ts)" stroke="none"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="var(--ts)" opacity=".35"/><rect x="23.5" y="3.5" width="1.5" height="5" rx=".75" fill="var(--ts)" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="var(--ts)"/></svg>
+    </div>
+  </div>
+  <div class="dl-wrap">
+    <div class="dl-icon">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="14" r="7" fill="rgba(255,255,255,.9)"/>
+        <path d="M8 34c0-6.6 5.4-12 12-12s12 5.4 12 12" fill="rgba(255,255,255,.9)"/>
+        <path d="M20 4 l10 4v9c0 6-4.5 11.5-10 13.5C14.5 28.5 10 23 10 18V8z" stroke="rgba(255,255,255,.5)" stroke-width="1.5" fill="none"/>
+        <path d="M15 20l3.5 3.5 7-7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div style="animation:su .35s ease .1s both">
+      <div class="dl-title">Abriendo Addi para completar tu verificación</div>
+    </div>
+    <div style="animation:su .35s ease .2s both;width:100%">
+      <div class="dl-sub" style="margin-bottom:12px">Cargando tu perfil de verificación…</div>
+      <div class="dl-progress"><div class="dl-bar"></div></div>
+    </div>
+    <div style="width:100%;animation:su .35s ease .8s both">
+      <button class="bp" onclick="go(1)" style="margin-bottom:8px">← Volver al correo</button>
+      <div style="text-align:center;font-size:13px;color:var(--tw);margin-top:8px">En un dispositivo real, esto abre directamente la app Addi en el flujo de verificación KYC.</div>
+    </div>
+  </div>
+</div>
+
+<div id="dots"></div>
+
+</div><!-- /phone -->
+
+<script>
+const screens=[0,1,2];let cur=0;
+const dE=document.getElementById('dots');
+for(let i=0;i<screens.length;i++){const d=document.createElement('div');d.className='dot';d.style.background=i===0?'#1c67d8':'rgba(255,255,255,.4)';d.onclick=(function(s){return()=>go(s)})(screens[i]);d.title='Screen '+screens[i];dE.appendChild(d)}
+function updD(){const ds=dE.children;for(let i=0;i<ds.length;i++){const a=screens[i]===cur;ds[i].style.background=a?'#1c67d8':'rgba(255,255,255,.4)';ds[i].style.width=a?'14px':'5px'}}
+function go(n){document.querySelectorAll('.s').forEach(s=>s.classList.remove('on'));document.getElementById('s'+n).classList.add('on');cur=n;updD()}
+document.addEventListener('keydown',e=>{const i=screens.indexOf(cur);if(e.key==='ArrowRight'&&i<screens.length-1)go(screens[i+1]);if(e.key==='ArrowLeft'&&i>0)go(screens[i-1])});
+</script>
+</body>
+</html>
