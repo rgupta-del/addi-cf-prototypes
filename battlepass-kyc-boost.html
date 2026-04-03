@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Addi — Cupo Boost</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--b:#1c67d8;--bl:#dbeafe;--bg:#f8fafc;--bgs:#f1f5f9;--w:#fff;--ts:#0f172a;--t:#475569;--tw:#94a3b8;--bd:#e2e8f0;--ok:#16a34a;--okl:#dcfce7;--amb:#f59e0b;--ambl:#fef3c7;--tel:#0d9488;--tell:#ccfbf1;--r:16px;--rs:12px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Outfit',sans-serif;background:#e8e8e8;display:flex;justify-content:center;align-items:center;min-height:100vh}
+#phone{width:390px;height:844px;background:var(--bg);border-radius:40px;overflow:hidden;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.28);border:8px solid #1a1a1a}
+.s{display:none;flex-direction:column;height:100%;position:absolute;inset:0;overflow:hidden}.s.on{display:flex;animation:fi .18s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes pu{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes du{from{transform:translateY(100%)}to{transform:translateY(0)}}
+input:focus,select:focus{outline:2px solid var(--b);outline-offset:-2px}
+button{font-family:'Outfit',sans-serif;cursor:pointer;border:none}
+/* Layout */
+.hdr{background:var(--w);border-bottom:1px solid var(--bd);flex-shrink:0}
+.hr{display:flex;align-items:center;padding:12px 16px;gap:12px;min-height:56px}
+.bk{width:40px;height:40px;border-radius:var(--rs);background:var(--bgs);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--ts)}
+.cl{width:36px;height:36px;border-radius:50%;background:var(--bgs);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ts)}
+.ht{font-size:16px;font-weight:600;color:var(--ts);flex:1;text-align:center}
+.pb{width:100%;height:4px;background:#e8edf1;flex-shrink:0}.pf{height:100%;background:var(--b);border-radius:2px;transition:width .5s ease}
+.pg{flex:1;padding:20px 16px 32px;display:flex;flex-direction:column;gap:18px;overflow-y:auto}
+.bt{padding:16px;border-top:1px solid var(--bd);background:var(--w);flex-shrink:0}
+.bp{width:100%;padding:14px;background:var(--b);color:#fff;border-radius:var(--rs);font-size:16px;font-weight:600;letter-spacing:-.2px;transition:opacity .15s}
+.bp:active{opacity:.8}.bp:disabled{background:var(--bd);color:var(--tw);cursor:default}
+/* Typography */
+.pg-title{font-size:26px;font-weight:700;color:var(--ts);letter-spacing:-.5px}
+.tt{font-size:22px;font-weight:700;color:var(--ts);letter-spacing:-.4px;line-height:1.2}
+.st{font-size:15px;color:var(--t);line-height:1.5}
+.sec-hd{font-size:17px;font-weight:700;color:var(--ts)}
+.sec-sub{font-size:13px;color:var(--tw);margin-top:2px}
+/* Challenge cards */
+.ch{background:var(--w);border:1.5px solid var(--amb);border-radius:var(--r);padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:6px;transition:opacity .15s}
+.ch.done{border-color:var(--ok);cursor:default}
+.ch.locked{border-color:var(--bd);opacity:.5;pointer-events:none}
+.ch-tag{font-size:11px;font-weight:700;color:var(--tw);text-transform:uppercase;letter-spacing:.08em}
+.ch-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.ch-name{font-size:16px;font-weight:700;color:var(--ts);flex:1}
+.ch-lock{font-size:20px}
+.ch-desc{font-size:13px;color:var(--t);line-height:1.4}
+.ch-link{font-size:13px;font-weight:600;color:var(--b);background:none;padding:4px 0 0;text-align:left}
+.ch-done-badge{background:var(--okl);color:var(--ok);font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;display:inline-flex;align-items:center;gap:4px;margin-top:2px}
+/* Benefits */
+.ben{background:var(--w);border:1px solid var(--bd);border-radius:var(--r);padding:16px}
+.ben-nm{font-size:14px;font-weight:600;color:var(--ts);line-height:1.3}
+.ben-ds{font-size:12px;color:var(--t);margin-top:4px}
+.ben-meta{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
+.ben-tg{font-size:11px;color:var(--tw)}
+/* Reto detail */
+.reto-wrap{flex:1;padding:24px 20px 32px;display:flex;flex-direction:column;gap:18px;overflow-y:auto}
+.prog-pill{display:inline-flex;align-items:center;gap:8px;background:var(--bgs);border-radius:100px;padding:7px 14px;font-size:13px;color:var(--t);font-weight:500}
+.pbar{width:36px;height:4px;background:var(--bd);border-radius:2px;overflow:hidden}
+.pfill{height:100%;border-radius:2px}
+.feat-list{display:flex;flex-direction:column;gap:14px}
+.feat-row{display:flex;gap:14px;align-items:flex-start}
+.feat-ic{width:34px;height:34px;border-radius:10px;background:var(--bgs);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;margin-top:2px}
+.feat-nm{font-size:14px;font-weight:600;color:var(--ts);line-height:1.4}
+.feat-ds{font-size:13px;color:var(--t);margin-top:2px;line-height:1.4}
+/* T&C screen */
+.img-ph{width:100%;height:130px;background:var(--bgs);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:44px}
+.reg-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-top:1px solid var(--bd);cursor:pointer}
+.legal{font-size:11px;color:var(--tw);line-height:1.6}
+/* Mid banner */
+.mid-ban{background:var(--okl);border-radius:var(--r);padding:13px 16px;display:flex;align-items:flex-start;gap:10px}
+.mid-ban-t{font-size:13px;font-weight:600;color:var(--ok);line-height:1.4}
+/* KYC fields */
+.cd{background:var(--w);border-radius:var(--r);border:1px solid var(--bd);padding:18px}
+.av{width:56px;height:56px;border-radius:50%;background:var(--bl);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:var(--b)}
+.kv-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd)}
+.kv-row:last-child{border-bottom:none}
+.kv-l{font-size:12px;color:var(--tw)}
+.kv-v{font-size:14px;font-weight:500;color:var(--ts)}
+.ro{display:flex;align-items:center;gap:12px;padding:14px;background:var(--w);border:1.5px solid var(--bd);border-radius:var(--rs);width:100%;text-align:left;transition:all .15s}
+.ro.sel{background:var(--bl);border-color:var(--b)}
+.rd{width:22px;height:22px;border-radius:50%;border:2px solid var(--tw);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ro.sel .rd{border-color:var(--b)}.ri{width:12px;height:12px;border-radius:50%;background:var(--b);display:none}.ro.sel .ri{display:block}
+.rl{font-size:15px;font-weight:500;color:var(--ts)}
+.ig{display:flex;flex-direction:column;gap:6px}.il{font-size:13px;font-weight:500;color:var(--t)}
+.iw{display:flex;align-items:center;border:1.5px solid var(--bd);border-radius:var(--rs);background:var(--w);overflow:hidden}
+.ip{padding:0 0 0 14px;font-size:14px;color:var(--t)}.if{flex:1;padding:13px 14px;border:none;font-size:15px;color:var(--ts);background:transparent}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ac{padding:16px 12px;background:var(--w);border:1.5px solid var(--bd);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:all .15s;text-align:center}
+.ac.sel{background:var(--bl);border-color:var(--b)}
+.sw{display:flex;align-items:center;border:1.5px solid var(--bd);border-radius:var(--rs);background:var(--w);overflow:hidden;position:relative}
+.sf{flex:1;padding:13px 14px;border:none;font-size:15px;color:var(--ts);background:transparent;appearance:none;-webkit-appearance:none}
+.sa{position:absolute;right:14px;pointer-events:none;color:var(--tw);font-size:12px}
+/* Address */
+.al{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--bd);cursor:pointer}
+.al:last-child{border-bottom:none}
+.al-ic{width:34px;height:34px;border-radius:50%;background:var(--bgs);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.al-nm{font-size:14px;font-weight:500;color:var(--ts)}.al-ds{font-size:12px;color:var(--tw);margin-top:2px}
+/* Info validated */
+.val-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px;padding:32px 24px;cursor:pointer}
+.val-ic{width:80px;height:80px;border-radius:50%;background:var(--okl);display:flex;align-items:center;justify-content:center;font-size:36px;position:relative}
+.pd{width:7px;height:7px;border-radius:50%;background:var(--ok);position:absolute;animation:pu 1.4s ease-in-out infinite}
+/* Final success */
+.fin-hd{background:var(--tell);padding:32px 24px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;flex-shrink:0}
+.fin-ic{width:56px;height:56px;border-radius:16px;background:var(--tel);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:4px}
+.fin-badge{background:rgba(13,148,136,.15);color:var(--tel);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:4px 12px;border-radius:100px}
+.fin-tt{font-size:22px;font-weight:700;color:var(--ts);line-height:1.2;letter-spacing:-.4px}
+.boost-card{background:var(--w);border:1px solid var(--bd);border-radius:var(--r);padding:20px}
+.boost-lbl{font-size:12px;font-weight:600;color:var(--tw);margin-bottom:10px}
+.boost-nums{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.boost-old{font-size:20px;font-weight:700;color:var(--tw);text-decoration:line-through}
+.boost-arr{font-size:18px;color:var(--ok)}
+.boost-new{font-size:28px;font-weight:700;color:var(--ts)}
+.boost-badge{display:inline-flex;background:var(--okl);color:var(--ok);font-size:12px;font-weight:600;padding:4px 10px;border-radius:100px}
+/* Drawer */
+.dov{position:absolute;inset:0;background:rgba(0,0,0,.45);z-index:50;display:none;align-items:flex-end}
+.dov.open{display:flex;animation:fi .2s ease}
+.dsh{background:var(--w);border-radius:24px 24px 0 0;padding:24px;width:100%;animation:du .25s ease}
+.dsh-hdl{width:40px;height:4px;background:var(--bd);border-radius:2px;margin:0 auto 20px}
+</style>
+</head>
+<body>
+<div id="phone">
+
+<!-- s0: HOME 0/2 — Both challenges locked -->
+<div class="s on" id="s0">
+  <div class="hdr">
+    <div class="hr">
+      <button class="bk">←</button>
+      <div style="flex:1"></div>
+      <button class="cl">✕</button>
+    </div>
+  </div>
+  <div class="pg">
+    <div class="pg-title">Mis beneficios</div>
+    <div>
+      <div class="sec-hd">Gana más beneficios</div>
+      <div class="sec-sub">Participa para obtener más beneficios.</div>
+    </div>
+    <div class="ch" onclick="go(1)">
+      <div class="ch-tag">Actualización</div>
+      <div class="ch-row">
+        <div class="ch-name">Acepta los nuevos TYC</div>
+        <span class="ch-lock">🔒</span>
+      </div>
+      <div class="ch-desc">Mejora en 2 minutos tu cupo.</div>
+      <button class="ch-link">Desbloquear beneficio →</button>
+    </div>
+    <div class="ch locked">
+      <div class="ch-tag">Actualización</div>
+      <div class="ch-row">
+        <div class="ch-name">Actualiza tu información</div>
+        <span class="ch-lock">🔒</span>
+      </div>
+      <div class="ch-desc">Participa por beneficios al ser de los primeros en actualizarla.</div>
+      <button class="ch-link" style="color:var(--tw)">Desbloquear beneficio →</button>
+    </div>
+    <div>
+      <div class="sec-hd">Beneficios incluidos</div>
+      <div class="sec-sub" style="margin-bottom:14px">Tus beneficios disponibles por preferir Addi</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="ben">
+          <div class="ben-nm">0% de interés hasta 3 cuotas con tu Cupo</div>
+          <div class="ben-ds">Aplican Términos y Condiciones</div>
+          <div class="ben-meta">
+            <span class="ben-tg">🏪 En todos los aliados</span>
+            <span class="ben-tg">📅 No vence</span>
+          </div>
+        </div>
+        <div class="ben">
+          <div class="ben-nm">Tasa de 1.99% M.V. en compras en el Marketplace con el Crédito Grande</div>
+          <div class="ben-ds">Aplican Términos y Condiciones</div>
+          <div class="ben-meta">
+            <span class="ben-tg">🛒 En Marketplace</span>
+            <span class="ben-tg">📅 Hasta 31 de oct. de 2024</span>
+          </div>
+          <button style="background:none;font-size:13px;font-weight:600;color:var(--b);padding:8px 0 0;text-align:left">Usar el beneficio →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- s1: T&C CHALLENGE DETAIL -->
+<div class="s" id="s1">
+  <div class="hdr">
+    <div class="hr">
+      <div style="flex:1"></div>
+      <button class="cl" onclick="go(0)">✕</button>
+    </div>
+  </div>
+  <div class="reto-wrap">
+    <div style="font-size:32px;margin-bottom:4px">🔒</div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--tw);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Reto</div>
+      <div class="tt">Acepta los nuevos TYC del cupo</div>
+    </div>
+    <div class="prog-pill">
+      <div class="pbar"><div class="pfill" style="width:0%;background:var(--b)"></div></div>
+      Acepta los TYC &nbsp;<span style="color:var(--tw)">0/1</span>
+    </div>
+    <div class="feat-list">
+      <div class="feat-row"><div class="feat-ic">⏱</div><div><div class="feat-nm">Te toma 2 minutos</div></div></div>
+      <div class="feat-row"><div class="feat-ic">✉️</div><div><div class="feat-nm">Participa cumpliendo este reto</div></div></div>
+      <div class="feat-row"><div class="feat-ic">🔓</div><div><div class="feat-nm">Una vez desbloquees el beneficio de tu Cupo, no necesitas hacer más nada.</div></div></div>
+      <div class="feat-row"><div class="feat-ic">📄</div><div><div class="feat-nm">Aplican <span style="color:var(--b)">Términos y Condiciones</span></div></div></div>
+    </div>
+  </div>
+  <div class="bt"><button class="bp" onclick="go(2)">Aceptar los TYC</button></div>
+</div>
+
+<!-- s2: T&C ACCEPTANCE SCREEN -->
+<div class="s" id="s2">
+  <div class="hdr">
+    <div class="hr">
+      <div style="flex:1"></div>
+      <button class="cl" onclick="go(1)">✕</button>
+    </div>
+  </div>
+  <div class="pg" style="gap:16px">
+    <div class="img-ph">📊</div>
+    <div>
+      <div class="tt">Cupo ahora tiene un límite de 5.000.000</div>
+      <div class="st" style="margin-top:8px">Tu crédito Addi está evolucionando. Ahora tendrás una línea de crédito rotativa. Compras más fácil y pagas una vez al mes.</div>
+    </div>
+    <div class="feat-list">
+      <div class="feat-row">
+        <div class="feat-ic">💳</div>
+        <div><div class="feat-nm">Tus compras se agrupan en una sola línea</div><div class="feat-ds">Más parecido a las tarjetas de crédito.</div></div>
+      </div>
+      <div class="feat-row">
+        <div class="feat-ic">📅</div>
+        <div><div class="feat-nm">Un pago en la misma fecha</div><div class="feat-ds">Pagas todas tus compras en una sola fecha. Tu fecha de pago es los 20 de cada mes.</div></div>
+      </div>
+      <div class="feat-row">
+        <div class="feat-ic">🔄</div>
+        <div><div class="feat-nm">Tus montos y cuotas no cambian</div><div class="feat-ds">Tu saldo gana intereses todos los días. Consulta tu rentabilidad cuando quieras en la app.</div></div>
+      </div>
+      <div class="feat-row">
+        <div class="feat-ic">📈</div>
+        <div><div class="feat-nm">Tasa de interés del 21% este mes</div><div class="feat-ds">Consulta tu rentabilidad cuando quieras en la app.</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="reg-row">
+        <span style="font-size:14px;font-weight:600;color:var(--ts)">📄 Reglamento de tu Cupo</span>
+        <span style="font-size:18px;color:var(--tw)">›</span>
+      </div>
+      <div class="legal">Al hacer click en continuar aceptas el Reglamento de Cuenta de Ahorros.</div>
+    </div>
+  </div>
+  <div class="bt"><button class="bp" onclick="go(3)">Aceptar y continuar</button></div>
+</div>
+
+<!-- s3: HOME 1/2 — T&C done, KYC now unlocked -->
+<div class="s" id="s3">
+  <div class="hdr">
+    <div class="hr">
+      <button class="bk">←</button>
+      <div style="flex:1"></div>
+      <button class="cl">✕</button>
+    </div>
+  </div>
+  <div class="pg">
+    <div class="pg-title">Mis beneficios</div>
+    <div class="mid-ban">
+      <span style="font-size:18px">✅</span>
+      <div class="mid-ban-t">Reto 1 completado. Actualiza tu información para obtener tu boost de +$1.000.000 de cupo.</div>
+    </div>
+    <div>
+      <div class="sec-hd">Gana más beneficios</div>
+      <div class="sec-sub">Participa para obtener más beneficios.</div>
+    </div>
+    <div class="ch done">
+      <div class="ch-tag">Actualización</div>
+      <div class="ch-row">
+        <div class="ch-name">Acepta los nuevos TYC</div>
+        <span style="font-size:18px">✅</span>
+      </div>
+      <div class="ch-desc">Mejora en 2 minutos tu cupo.</div>
+      <span class="ch-done-badge">✓ Completado</span>
+    </div>
+    <div class="ch" onclick="go(4)">
+      <div class="ch-tag">Actualización</div>
+      <div class="ch-row">
+        <div class="ch-name">Actualiza tu información</div>
+        <span class="ch-lock">🔒</span>
+      </div>
+      <div class="ch-desc">Participa por beneficios al ser de los primeros en actualizarla.</div>
+      <button class="ch-link">Desbloquear beneficio →</button>
+    </div>
+    <div>
+      <div class="sec-hd">Beneficios incluidos</div>
+      <div class="sec-sub" style="margin-bottom:14px">Tus beneficios disponibles por preferir Addi</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="ben">
+          <div class="ben-nm">0% de interés hasta 3 cuotas con tu Cupo</div>
+          <div class="ben-ds">Aplican Términos y Condiciones</div>
+          <div class="ben-meta">
+            <span class="ben-tg">🏪 En todos los aliados</span>
+            <span class="ben-tg">📅 No vence</span>
+          </div>
+        </div>
+        <div class="ben">
+          <div class="ben-nm">Tasa de 1.99% M.V. en compras en el Marketplace con el Crédito Grande</div>
+          <div class="ben-ds">Aplican Términos y Condiciones</div>
+          <div class="ben-meta">
+            <span class="ben-tg">🛒 En Marketplace</span>
+            <span class="ben-tg">📅 Hasta 31 de oct. de 2024</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- s4: KYC CHALLENGE DETAIL -->
+<div class="s" id="s4">
+  <div class="hdr">
+    <div class="hr">
+      <div style="flex:1"></div>
+      <button class="cl" onclick="go(3)">✕</button>
+    </div>
+  </div>
+  <div class="reto-wrap">
+    <div style="font-size:32px;margin-bottom:4px">🔒</div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--tw);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Reto</div>
+      <div class="tt">Actualiza tu información del cupo</div>
+    </div>
+    <div class="prog-pill">
+      <div class="pbar"><div class="pfill" style="width:0%;background:var(--b)"></div></div>
+      Actualiza tu información &nbsp;<span style="color:var(--tw)">0/1</span>
+    </div>
+    <div class="feat-list">
+      <div class="feat-row"><div class="feat-ic">⏱</div><div><div class="feat-nm">Te toma 5 minutos</div></div></div>
+      <div class="feat-row"><div class="feat-ic">📋</div><div><div class="feat-nm">Confirma tus datos personales</div><div class="feat-ds">Verifica y actualiza tu información de contacto.</div></div></div>
+      <div class="feat-row"><div class="feat-ic">💰</div><div><div class="feat-nm">Declara tu actividad económica</div><div class="feat-ds">Cuéntanos sobre tu fuente de ingresos.</div></div></div>
+      <div class="feat-row"><div class="feat-ic">🎯</div><div><div class="feat-nm">Desbloquea +$1.000.000 de cupo</div><div class="feat-ds">Al completarlo, tu cupo sube de $5.000.000 a $6.000.000.</div></div></div>
+    </div>
+  </div>
+  <div class="bt"><button class="bp" onclick="go(5)">Actualizar información</button></div>
+</div>
+
+<!-- s5: KYC 1/8 — Confirmar datos personales -->
+<div class="s" id="s5">
+  <div class="hdr">
+    <div class="hr">
+      <button class="bk" onclick="go(4)">←</button>
+      <span class="ht">Confirma tus datos</span>
+      <div style="width:40px"></div>
+    </div>
+    <div class="pb"><div class="pf" style="width:12.5%"></div></div>
+  </div>
+  <div class="pg">
+    <div>
+      <div class="tt">¿Tu información está correcta?</div>
+      <div class="st" style="margin-top:6px">Revisa y actualiza si es necesario.</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div class="av">JR</div>
+      <div>
+        <div style="font-size:16px;font-weight:700;color:var(--ts)">Juan Ramírez</div>
+        <div style="font-size:13px;color:var(--tw);margin-top:2px">CC 1.234.567.890</div>
+      </div>
+    </div>
+    <div class="cd" id="datos-view">
+      <div class="kv-row"><span class="kv-l">Cédula</span><span class="kv-v">1.234.567.890</span></div>
+      <div class="kv-row"><span class="kv-l">Celular</span><span class="kv-v">+57 310 456 7890</span></div>
+      <div class="kv-row"><span class="kv-l">Correo</span><span class="kv-v">juan@gmail.com</span></div>
+      <div class="kv-row"><span class="kv-l">Género</span><span class="kv-v">Masculino</span></div>
+      <div class="kv-row"><span class="kv-l">Ciudad</span><span class="kv-v">Bogotá</span></div>
+      <div class="kv-row"><span class="kv-l">Fecha de nac.</span><span class="kv-v">14/03/1990</span></div>
+    </div>
+    <div id="datos-edit" style="display:none;flex-direction:column;gap:12px">
+      <div class="ig"><div class="il">Celular</div><div class="iw"><span class="ip">+57</span><input class="if" type="tel" value="310 456 7890"></div></div>
+      <div class="ig"><div class="il">Correo electrónico</div><div class="iw"><input class="if" type="email" value="juan@gmail.com"></div></div>
+      <div class="ig"><div class="il">Género</div>
+        <div class="sw"><select class="sf"><option>Masculino</option><option>Femenino</option><option>Otro</option></select><span class="sa">▾</span></div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center">
+      <button id="edit-toggle" onclick="toggleEdit()" style="background:none;font-size:14px;font-weight:600;color:var(--b);padding:4px 0">Editar información</button>
+    </div>
+  </div>
+  <div class="bt"><button class="bp" onclick="go(6)">Confirmar datos</button></div>
+</div>
+
+<!-- s6: KYC 2/8 — Declaración PEP -->
+<div class="s" id="s6">
+  <div class="hdr">
+    <div class="hr">
+      <button class="bk" onclick="go(5)">←</button>
+      <span class="ht">Declaración PEP</span>
+      <div style="width:40px"></div>
+    </div>
+    <div class="pb"><div class="pf" style="width:25%"></div></div>
+  </div>
+  <div class="pg">
+    <div>
+      <div class="tt">¿Eres una persona expuesta políticamente?</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+        <div class="st" style="margin-top:0;flex:1">Persona que desempeña o ha desempeñado funciones públicas destacadas.</div>
+        <button onclick="showD('pep-dov')" style="background:var(--bgs);border-radius:50%;width:28px;height:28px;font-size:14px;color:var(--tw);flex-shrink:0">ℹ</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="ro" data-g="pep1" data-v="no" onclick="selR(this,'pep1')"><div class="rd"><div class="ri"></div></div><span class="rl">No soy PEP</span></button>
+      <button class="ro" data-g="pep1" data-v="si" onclick="selR(this,'pep1')"><div class="rd"><div class="ri"></div></div><span class="rl">Soy PEP</span></button>
+    </div>
+    <div>
+      <div class="tt" style="font-size:18px">¿Tienes vínculos con algún PEP?</div>
+      <div class="st" style="margin-top:6px">Familiares o asociados cercanos de personas expuestas.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="ro" data-g="pep2" data-v="no" onclick="selR(this,'pep2')"><div class="rd"><div class="ri"></div></div><span class="rl">No tengo vínculos con PEP</span></button>
+      <button class="ro" data-g="pep2" data-v="si" onclick="selR(this,'pep2')"><div class="rd"><div class="ri"></div></div><span class="rl">Tengo vínculos con PEP</span></button>
+    </div>
+  </div>
+  <div class="bt"><button class="bp" id="pep-btn" disabled onclick="go(7)">Continuar</button></div>
+</div>
+
+<!-- s7: KYC 3/8 — Declaración tributaria -->
+<div class="s" id="s7">
+  <div class="hdr">
+    <div class="hr">
+      <button class="bk" onclick="go(6)">←</button>
+      <span class="ht">Declaración tributaria</span>
+      <div style="width:40px"></div>
+    </div>
+    <div class="pb"><div class="pf" style="width:37.5%"></div></div>
+  </div>
+  <div class="pg">
+    <div>
+      <div class="tt">¿Eres declarante de renta?</div>
+      <div class="st" style="margin-top:6px">Personas obligadas a presentar declaración de renta ante la DIAN.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="ro" data-g="tax" data-v="si" onclick="selR(this,'tax')"><div class="rd"><div class="ri"></div></div><span class="rl">Sí, soy declarante de renta</span></button>
+      <button class="ro" data-g="tax" data-v="no" onclick="selR(this,'tax')"><div class="rd"><div class="ri"></div></div><span class="rl">No soy declarante de renta</span></button>
+    </div>
+  </div>
+  <div class="bt"><button class="bp" id="tax-btn" disabled onclick="go(8)">Continuar</button></div>
+</div>
+
+<!-- s8: KYC 4/8 — Actividad económica -->
+<div class="s" id="s8">
+  <div class="hdr">
+    <div class="hr">
+      <button class="bk" onclick="go(7)">←</button>
+      <span class="ht">Actividad económica</span>
+      <div style="width:40px"></div>
+    </div>
+    <div class="pb"><div class="pf" style="width:50%"></div></div>
+  </div>
+  <div class="pg">
+    <div><div class="tt">¿Cuál es tu actividad económica?</div></div>
+    <div class="g2">
+      <div class="ac" onclick="selA(this)"><span style="font-size:24px">💼</span><span style="font-size:14px;font-weight:600;color:var(--ts)">Empleado</span></div>
+      <div class="ac" onclick="selA(this)"><span style="font-size:24px">🔧</span><span style="font-size:14px;font-weight:600;color:var(--ts)">Otro</span></div>
+      <div class="ac" onclick="selA(this)"><span style="font-size:24px">🎓</span><span style="font-size:14px;font-weight:600;color:var(--ts)">Estudiante</span></div>
+      <div class="ac" onclick="selA(this)"><span style="font-size:24px">👴</span><span style="font-size:14px;font-weight:600;color:var(--ts)">Pensionado</span></div>
+      <div class="ac" onclick="selA(this)"><span style="font-size:24px">🏠</span><span style="font-size:14px;font-weight:600;color:var(--ts)">Hogar</span></div>
+      <div class="ac" onclick="selA(this)"><span style="font-size:24px">📊</span><span style="font-size:14px;font-weight:600;color:var(--ts)">Rentista</span></div>
+    </div>
+  </div>
+  <div class="bt"><button class="bp" id="act-btn" disabled onclick="go(9)">Continuar</button></div>
+</div>
+
+<!-- s9: KYC 5/8 — Información financiera -->
+<div class="s" id="s9">
+  <div class="hdr">
+    <div class="hr">
+      <button class="bk" onclick="go(8)">←</button>
+      <span class="ht">Información financiera</span>
+      <div style="width:40px"></div>
+    </div>
+    <div class="pb"><div class="pf" style="width:62.5%"></div></div>
+  </div>
+  <div class="pg">
+    <div>
+      <div class="tt">¿Cuáles son tus ingresos y egresos mensuales?</div>
+      <div class="st" style="margin-top:6px">Ingresa valores en pesos colombianos (COP).</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="ig"><div class="il">Ingresos mensuales</div><div class="iw"><span class="ip">$</span><input class="if" id="fin-inc" type="number" placeholder="0" oninput="chkFin()"></div></div>
+      <div class="ig"><div class="il">Egresos mensuales</div><div class="iw"><span class="ip">$</span><input class="if" id="fin-exp" type="number" placeholder="0" oninput="chkFin()"></div></div>
+    </div>
+    <div style="background:var(--bgs);border-radius:var(--rs);padding:12px 14px">
+      <div style="font-size:13px;color:var(--t);line-height:1.5">💡 Esta información es confidencial y se usa solo para determinar tu cupo disponible.</div>
+    </div>
+  </div>
+  <div class="bt"><button class="bp" id="fin-btn" disabled onclick="go(10)">Continuar</button></div>
+</div>
+
+<!-- s10: KYC 6/8 — Residencia -->
+<div class="s" id="s10">
+  <div class="hdr">
+    <div class="hr">
+      <button class="bk" onclick="go(9)">←</button>
+      <span class="ht">Dirección de residencia</span>
+      <div style="width:40px"></div>
+    </div>
+    <div class="pb"><div class="pf" style="width:75%"></div></div>
+  </div>
+  <div class="pg">
+    <div><div class="tt">¿Dónde vives actualmente?</div></div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="ig"><div class="il">Departamento</div>
+        <div class="sw"><select class="sf" id="res-dep" onchange="chkRes()"><option value="">Selecciona departamento</option><option>Antioquia</option><option>Atlántico</option><option>Bolívar</option><option>Bogotá D.C.</option><option>Cundinamarca</option><option>Valle del Cauca</option></select><span class="sa">▾</span></div>
+      </div>
+      <div class="ig"><div class="il">Ciudad / Municipio</div>
+        <div class="sw"><select class="sf" id="res-cty" onchange="chkRes()"><option value="">Selecciona ciudad</option><option>Bogotá</option><option>Medellín</option><option>Cali</option><option>Barranquilla</option><option>Cartagena</option></select><span class="sa">▾</span></div>
+      </div>
+      <div class="ig"><div class="il">Dirección</div><div class="iw"><input class="if" id="res-adr" type="text" placeholder="Calle, carrera, número..." oninput="chkRes()"></div></div>
+    </div>
+  </div>
+  <div class="bt"><button class="bp" id="res-btn" disabled onclick="go(11)">Buscar dirección</button></div>
+</div>
+
+<!-- s11: KYC 7/8 — Sugerencias de dirección -->
+<div class="s" id="s11">
+  <div class="hdr">
+    <div class="hr">
+      <button class="bk" onclick="go(10)">←</button>
+      <span class="ht">Confirmar dirección</span>
+      <div style="width:40px"></div>
+    </div>
+    <div class="pb"><div class="pf" style="width:87.5%"></div></div>
+  </div>
+  <div class="pg">
+    <div>
+      <div class="tt">Selecciona tu dirección</div>
+      <div class="st" style="margin-top:6px">Elige la opción que mejor coincida con tu residencia.</div>
+    </div>
+    <div class="cd" style="padding:4px 16px">
+      <div class="al" onclick="go(12)"><div class="al-ic">📍</div><div><div class="al-nm">Calle 72 # 10-34, Apto 501</div><div class="al-ds">Bogotá, Cundinamarca</div></div></div>
+      <div class="al" onclick="go(12)"><div class="al-ic">📍</div><div><div class="al-nm">Calle 72 # 10-34</div><div class="al-ds">Bogotá, Cundinamarca</div></div></div>
+      <div class="al" onclick="go(12)"><div class="al-ic">📍</div><div><div class="al-nm">Calle 72 Norte # 10-34</div><div class="al-ds">Bogotá, Cundinamarca</div></div></div>
+      <div class="al" onclick="go(12)"><div class="al-ic">📍</div><div><div class="al-nm">Carrera 10 # 72-34</div><div class="al-ds">Bogotá, Cundinamarca</div></div></div>
+    </div>
+    <button style="background:none;font-size:14px;font-weight:600;color:var(--b);padding:4px 0;text-align:left">Ingresar dirección manualmente</button>
+  </div>
+</div>
+
+<!-- s12: KYC 8/8 — Confirmar dirección -->
+<div class="s" id="s12">
+  <div class="hdr">
+    <div class="hr">
+      <button class="bk" onclick="go(11)">←</button>
+      <span class="ht">Confirmar dirección</span>
+      <div style="width:40px"></div>
+    </div>
+    <div class="pb"><div class="pf" style="width:100%"></div></div>
+  </div>
+  <div class="pg">
+    <div>
+      <div class="tt">¿Es esta tu dirección?</div>
+      <div class="st" style="margin-top:6px">Verifica que la dirección sea correcta antes de confirmar.</div>
+    </div>
+    <div class="cd">
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        <div style="width:40px;height:40px;border-radius:10px;background:var(--bl);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📍</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:var(--ts);line-height:1.4">Calle 72 # 10-34, Apto 501</div>
+          <div style="font-size:13px;color:var(--tw);margin-top:4px">Bogotá, Cundinamarca, Colombia</div>
+        </div>
+      </div>
+    </div>
+    <button style="background:none;font-size:14px;font-weight:600;color:var(--b);padding:4px 0;text-align:left" onclick="go(11)">Cambiar dirección</button>
+  </div>
+  <div class="bt"><button class="bp" onclick="go(13)">Confirmar dirección</button></div>
+</div>
+
+<!-- s13: Información validada -->
+<div class="s" id="s13">
+  <div class="val-wrap" onclick="go(14)">
+    <div class="val-ic">
+      <span>✅</span>
+      <div class="pd" style="top:-4px;left:50%;margin-left:-3px"></div>
+      <div class="pd" style="top:50%;right:-4px;margin-top:-3px;animation-delay:.3s"></div>
+      <div class="pd" style="bottom:-4px;left:50%;margin-left:-3px;animation-delay:.6s"></div>
+    </div>
+    <div>
+      <div class="tt">¡Información validada!</div>
+      <div class="st" style="margin-top:8px">Tu información ha sido verificada exitosamente. Tu cupo está siendo actualizado.</div>
+    </div>
+    <div style="font-size:13px;color:var(--tw)">Toca para continuar</div>
+  </div>
+</div>
+
+<!-- s14: FINAL SUCCESS — Cupo boost -->
+<div class="s" id="s14">
+  <div class="fin-hd">
+    <div class="fin-ic">🚀</div>
+    <div class="fin-badge">Completaste el reto</div>
+    <div class="fin-tt">Mejoraste las condiciones de tu cupo</div>
+  </div>
+  <div class="pg" style="gap:16px">
+    <div class="boost-card">
+      <div class="boost-lbl">Tu nuevo límite de Cupo</div>
+      <div class="boost-nums">
+        <span class="boost-old">$ 5.000.000</span>
+        <span class="boost-arr">→</span>
+        <span class="boost-new">$ 6.000.000</span>
+      </div>
+      <span class="boost-badge">+$1.000.000 🎉</span>
+    </div>
+    <div class="feat-list">
+      <div class="feat-row">
+        <div class="feat-ic" style="background:var(--okl)">✅</div>
+        <div><div class="feat-nm">Ahora todas tus compras hechas con el cupo tendrán mejores beneficios</div></div>
+      </div>
+      <div class="feat-row">
+        <div class="feat-ic" style="background:var(--okl)">✅</div>
+        <div><div class="feat-nm">No hace falta volver a hacerlo el mes que viene.</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="bt">
+    <button class="bp" onclick="go(0)" style="background:var(--ts)">Ir al inicio</button>
+  </div>
+</div>
+
+<!-- PEP Info Drawer -->
+<div class="dov" id="pep-dov" onclick="hideD('pep-dov')">
+  <div class="dsh" onclick="event.stopPropagation()">
+    <div class="dsh-hdl"></div>
+    <div style="font-size:18px;font-weight:700;color:var(--ts);margin-bottom:10px">¿Qué es un PEP?</div>
+    <div style="font-size:14px;color:var(--t);line-height:1.6">
+      Una <strong>Persona Expuesta Políticamente (PEP)</strong> es aquella que desempeña o ha desempeñado funciones públicas destacadas, como:<br><br>
+      • Jefes de Estado o de Gobierno<br>
+      • Funcionarios de alto rango del gobierno<br>
+      • Jueces de la Corte Suprema<br>
+      • Parlamentarios o legisladores<br>
+      • Altos directivos de empresas estatales
+    </div>
+    <div style="margin-top:20px"><button class="bp" onclick="hideD('pep-dov')">Entendido</button></div>
+  </div>
+</div>
+
+</div>
+<script>
+const screens=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+let cur=0;
+const st={pep1:null,pep2:null,tax:null,act:null,finOk:false,resOk:false};
+const $=id=>document.getElementById(id);
+function go(n){
+  document.querySelector('.s.on')?.classList.remove('on');
+  cur=screens.indexOf(n);
+  $('s'+n).classList.add('on');
+  $('s'+n).scrollTop=0;
+}
+function selR(el,g){
+  document.querySelectorAll('[data-g="'+g+'"]').forEach(r=>r.classList.remove('sel'));
+  el.classList.add('sel');
+  st[g]=el.dataset.v;
+  if(g==='pep1'||g==='pep2'){if(st.pep1&&st.pep2)$('pep-btn').disabled=false;}
+  if(g==='tax')$('tax-btn').disabled=false;
+}
+function selA(el){
+  document.querySelectorAll('.ac').forEach(a=>a.classList.remove('sel'));
+  el.classList.add('sel');st.act='set';
+  $('act-btn').disabled=false;
+}
+function chkFin(){
+  const inc=$('fin-inc').value.trim(),exp=$('fin-exp').value.trim();
+  st.finOk=inc.length>0&&exp.length>0;$('fin-btn').disabled=!st.finOk;
+}
+function chkRes(){
+  const dep=$('res-dep').value,cty=$('res-cty').value,adr=$('res-adr').value.trim();
+  st.resOk=dep&&cty&&adr.length>2;$('res-btn').disabled=!st.resOk;
+}
+function toggleEdit(){
+  const view=$('datos-view'),edit=$('datos-edit'),btn=$('edit-toggle');
+  const showing=edit.style.display==='flex';
+  if(showing){edit.style.display='none';view.style.display='flex';btn.textContent='Editar información';}
+  else{view.style.display='none';edit.style.display='flex';btn.textContent='Guardar cambios';}
+}
+function showD(id){$(id).classList.add('open')}
+function hideD(id){$(id).classList.remove('open')}
+</script>
+</body>
+</html>
