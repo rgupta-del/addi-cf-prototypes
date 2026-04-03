@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Addi CF Migration — KYC-TC-App Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--b:#1c67d8;--bl:#e6f5ff;--bg:#fbfcfd;--bgs:#eff3f5;--w:#fff;--ts:#121d28;--t:#4a5561;--tw:#a8b2ba;--bd:#dde5eb;--ok:#16a34a;--okl:#dcfce7;--tr:#eff3f7;--dk:#0f1b2d;--r:16px;--rs:12px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Outfit',sans-serif;background:#e8e8e8;display:flex;justify-content:center;align-items:center;min-height:100vh}
+#phone{width:390px;height:844px;background:var(--bg);border-radius:40px;overflow:hidden;position:relative;box-shadow:0 25px 80px rgba(0,0,0,.25);border:8px solid #1a1a1a}
+.s{display:none;flex-direction:column;height:100%;position:absolute;inset:0;overflow:hidden}.s.on{display:flex;animation:fi .2s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes su{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes si{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+@keyframes sp{to{transform:rotate(360deg)}}
+@keyframes pu{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes du{from{transform:translateY(100%)}to{transform:translateY(0)}}
+input:focus,select:focus{outline:2px solid var(--b);outline-offset:-2px}
+button{font-family:'Outfit',sans-serif;cursor:pointer}
+.hdr{position:sticky;top:0;background:var(--w);z-index:10;border-bottom:1px solid var(--bd)}
+.hr{display:flex;align-items:center;padding:12px 16px;gap:12px}
+.bk{width:40px;height:40px;border-radius:var(--rs);background:var(--bgs);border:none;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--ts)}
+.bkb{width:40px;height:40px;border-radius:var(--rs);background:none;border:none;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--b)}
+.cl{width:40px;height:40px;border-radius:50%;background:var(--bgs);border:none;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ts);margin-left:auto}
+.ht{font-size:16px;font-weight:600;color:var(--ts);flex:1}
+.pb{width:100%;height:4px;background:var(--tr)}.pf{height:100%;background:var(--b);border-radius:2px;transition:width .5s ease}
+.pg{flex:1;padding:24px 16px 32px;display:flex;flex-direction:column;gap:24px;overflow-y:auto}
+.pgc{align-items:center;text-align:center;justify-content:center}
+.bt{padding:16px;border-top:1px solid var(--bd);background:var(--w);flex-shrink:0}
+.bp{width:100%;padding:14px 24px;background:var(--b);color:#fff;border:none;border-radius:var(--rs);font-size:16px;font-weight:600;letter-spacing:-.16px;transition:opacity .15s}
+.bp:active{opacity:.85}.bp:disabled{background:var(--bd);color:var(--tw);cursor:default}
+.bo{width:100%;padding:14px 24px;background:transparent;color:var(--b);border:1.5px solid var(--b);border-radius:var(--rs);font-size:16px;font-weight:600}
+.gh{background:none;border:none;font-size:14px;font-weight:600;padding:8px;text-decoration:underline}
+.tt{font-size:24px;font-weight:700;color:var(--ts);line-height:1.2;letter-spacing:-.48px}
+.st{font-size:16px;color:var(--t);margin-top:8px;line-height:1.4}
+.cd{background:var(--w);border-radius:var(--r);border:1px solid var(--bd);padding:20px}
+.ro{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--w);border:1.5px solid var(--bd);border-radius:var(--rs);width:100%;text-align:left;transition:all .15s}
+.ro.sel{background:var(--bl);border-color:var(--b)}
+.rd{width:22px;height:22px;border-radius:50%;border:2px solid var(--tw);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .15s}
+.ro.sel .rd{border-color:var(--b)}.ri{width:12px;height:12px;border-radius:50%;background:var(--b);display:none}.ro.sel .ri{display:block}
+.rl{font-size:15px;font-weight:500;color:var(--ts)}
+.cb{width:22px;height:22px;border-radius:6px;border:2px solid var(--tw);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.cb.ck{background:var(--b);border-color:var(--b)}
+.ig{display:flex;flex-direction:column;gap:6px}.il{font-size:13px;font-weight:500;color:var(--t)}
+.iw{display:flex;align-items:center;border:1.5px solid var(--bd);border-radius:var(--rs);background:var(--w);overflow:hidden}
+.ip{padding:0 0 0 14px;font-size:15px;color:var(--t)}.if{flex:1;padding:14px;border:none;font-size:15px;color:var(--ts);background:transparent}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ac{padding:20px 14px;background:var(--w);border:1.5px solid var(--bd);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;gap:8px;transition:all .15s}
+.ac.sel{background:var(--bl);border-color:var(--b)}
+.ib{background:var(--bl);border-radius:var(--rs);padding:14px;display:flex;gap:10px;align-items:flex-start}
+.an{animation:su .35s ease both}.an1{animation:su .35s ease .12s both}.an2{animation:su .35s ease .24s both}
+/* Drawer */
+.dov{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:20;display:none;align-items:flex-end;animation:fi .2s ease}
+.dov.show{display:flex}.dsh{width:100%;background:var(--w);border-radius:20px 20px 0 0;padding:24px 16px 32px;animation:du .3s ease;max-height:75%;overflow-y:auto}
+.dh{width:36px;height:4px;background:var(--bd);border-radius:2px;margin:0 auto 20px}
+/* Camera */
+.cm{background:#0a0a0a}.cmh{display:flex;align-items:center;padding:12px 16px}
+.cmcl{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:var(--b);font-size:16px;display:flex;align-items:center;justify-content:center;margin-left:auto}
+.cmt{font-size:20px;font-weight:700;color:#fff;text-align:center;letter-spacing:-.4px}
+.cms{font-size:15px;color:rgba(255,255,255,.7);text-align:center;line-height:1.4}
+.cf{border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center}
+.cpb{width:72px;height:72px;border-radius:50%;background:#fff;border:4px solid rgba(255,255,255,.3);transition:transform .1s}
+.cpb:active{transform:scale(.92)}
+/* Select */
+.sw{display:flex;align-items:center;border:1.5px solid var(--bd);border-radius:var(--rs);background:var(--w);overflow:hidden;position:relative}
+.sf{flex:1;padding:14px;border:none;font-size:15px;color:var(--ts);background:transparent;appearance:none;-webkit-appearance:none}
+.sa{position:absolute;right:14px;pointer-events:none;color:var(--tw)}
+/* Address list */
+.al{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--bd);cursor:pointer}
+.al:last-child{border-bottom:none}
+/* Nav */
+.nb{display:flex;justify-content:space-around;padding:10px 0 24px;border-top:1px solid var(--bd);background:var(--w);flex-shrink:0}
+.ni{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
+.nl{font-size:11px;color:var(--tw);font-weight:400}.ni.at .nl{color:var(--b);font-weight:600}
+/* Dots */
+#dots{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);display:flex;gap:2px;z-index:50;padding:2px 4px;background:rgba(0,0,0,.15);border-radius:6px}
+.dot{width:5px;height:5px;border-radius:50%;transition:all .2s;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="phone">
+
+<!-- s0: LOGIN -->
+<div id="s0" class="s on" style="background:linear-gradient(175deg,#0c2d8f 0%,#1444b0 40%,#1c5ac0 100%)">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;padding:16px 16px 0">
+    <div style="margin-top:16px;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center" class="an"><svg width="20" height="24" viewBox="0 0 20 24" fill="none"><path d="M10 0C7.8 0 6 1.8 6 4v1.5L0 20h4.5l1.2-3h8.6l1.2 3H20L14 5.5V4c0-2.2-1.8-4-4-4zm0 3c.55 0 1 .45 1 1v.5L14.2 14H5.8L9 4.5V4c0-.55.45-1 1-1z" fill="white"/></svg></div>
+    <div style="flex:1"></div>
+    <div style="text-align:center;margin-bottom:12px" class="an1">
+      <div style="font-size:32px;font-weight:700;color:#fff;line-height:1.2;letter-spacing:-.64px">Explora. Compra.<br>Paga. Ahorra.</div>
+      <div style="font-size:16px;color:#eff3f5;margin-top:12px">Bienvenido a una vida financiera.</div>
+    </div>
+  </div>
+  <div style="padding:16px;display:flex;flex-direction:column;gap:12px" class="an2">
+    <div style="display:flex;gap:12px">
+      <button style="flex:1;padding:14px;background:var(--bl);color:var(--b);border:none;border-radius:var(--rs);font-size:16px;font-weight:600" onclick="go(1)">Iniciar sesión</button>
+      <button class="bp" style="flex:1;border:1.5px solid #fff" onclick="go(1)">Registrarme</button>
+    </div>
+    <button class="gh" style="color:#fff;font-size:16px" onclick="go(1)">Solo quiero explorar</button>
+    <div style="font-size:11px;color:rgba(255,255,255,.55);text-align:center;line-height:1.3;padding:4px 8px">Al hacer click en "solo quiero explorar", aceptas los <u style="font-weight:700">términos y condiciones</u> de nuestra Plataforma y el tratamiento de tus datos según la <u style="font-weight:700">Política de Privacidad</u> de Adelante Soluciones Financieras S.A.S.</div>
+  </div>
+</div>
+
+
+<!-- s1: DRAWER over dimmed home bg -->
+<div id="s1" class="s" style="background:linear-gradient(175deg,#0c2d8f 0%,#1444b0 40%,#1c5ac0 100%)">
+  <div style="flex:1;filter:blur(2px);opacity:.3"></div>
+  <div id="drawer1" class="dov show" onclick="go(0)">
+    <div class="dsh" onclick="event.stopPropagation()">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button style="width:32px;height:32px;border-radius:50%;background:var(--bgs);border:none;font-size:14px;color:var(--t)" onclick="go(0)">✕</button></div>
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="width:56px;height:56px;border-radius:50%;background:var(--bl);display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><span style="font-size:28px">⭐</span></div>
+        <div class="tt" style="font-size:22px">Activa tu linea de credito Addi</div>
+        <div class="st">Completa estos pasos para desbloquear tu credito rotativo y comprar con mas facilidad. <b>Solo toma un par de minutos.</b></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:24px">
+        <div style="display:flex;align-items:flex-start;gap:14px"><div style="width:40px;height:40px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:18px">☑️</span></div><div><div style="font-size:15px;font-weight:600;color:var(--ts)">Acepta los nuevos terminos</div><div style="font-size:13px;color:var(--t);margin-top:2px">Tu credito pasa a ser una linea rotativa</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:14px"><div style="width:40px;height:40px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:18px">👤</span></div><div><div style="font-size:15px;font-weight:600;color:var(--ts)">Confirma tus datos</div><div style="font-size:13px;color:var(--t);margin-top:2px">Direccion y datos de contacto</div></div></div>
+      </div>
+      <button class="bp" onclick="go(2)">Comenzar</button>
+      <button class="gh" style="width:100%;color:var(--b);margin-top:8px" onclick="go(0)">Ahora no</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- s2: T&C CONSENT (matches Originations Banner — screen 4) -->
+<div id="s2" class="s" style="background:var(--bg)">
+  <div style="display:flex;align-items:center;padding:12px 16px;gap:12px"><button class="bkb" onclick="go(1)">‹</button><div style="flex:1"></div></div>
+  <div class="pb"><div class="pf" style="width:10%"></div></div>
+  <div class="pg">
+    <div class="an"><div class="tt">Cupo ahora tiene un límite de $5.000.000</div><div class="st">Tu crédito Addi está evolucionando. Ahora tendrás una línea de crédito rotativa. Compra más fácil y paga una vez al mes.</div></div>
+    <div style="display:flex;flex-direction:column;gap:10px" class="an1">
+      <div style="display:flex;align-items:flex-start;gap:12px;padding:14px;background:var(--w);border:1px solid var(--bd);border-radius:var(--rs)">
+        <div style="width:40px;height:40px;background:var(--bl);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--ts)">Tus compras en una sola línea</div><div style="font-size:13px;color:var(--t);margin-top:3px">Se agrupan más parecido a una tarjeta de crédito. Más fácil de seguir.</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:12px;padding:14px;background:var(--w);border:1px solid var(--bd);border-radius:var(--rs)">
+        <div style="width:40px;height:40px;background:var(--bl);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--ts)">Un pago en la misma fecha</div><div style="font-size:13px;color:var(--t);margin-top:3px">Tu fecha de pago es el 20 de cada mes. Todo en un solo cobro.</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:12px;padding:14px;background:var(--w);border:1px solid var(--bd);border-radius:var(--rs)">
+        <div style="width:40px;height:40px;background:var(--bl);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--ts)">Tus montos y cuotas no cambian</div><div style="font-size:13px;color:var(--t);margin-top:3px">Las condiciones de tus compras actuales se mantienen igual.</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:12px;padding:14px;background:var(--w);border:1px solid var(--bd);border-radius:var(--rs)">
+        <div style="width:40px;height:40px;background:var(--bl);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--ts)">Tasa de interés del 21% este mes</div><div style="font-size:13px;color:var(--t);margin-top:3px">Consulta la rentabilidad cuando quieras en la app.</div></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--bl);border-radius:var(--rs);cursor:pointer" class="an2">
+      <span style="font-size:15px;font-weight:600;color:var(--b)">Reglamento de tu Cupo</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+    <div style="font-size:12px;color:var(--tw);text-align:center">Al hacer clic confirmarás que aceptas el Reglamento del Cuenta de Ahorro.</div>
+  </div>
+  <div class="bt"><button class="bp" onclick="go(3)">Aceptar y continuar</button></div>
+</div>
+
+
+<!-- s3: CONFIRM PERSONAL INFO -->
+<div id="s3" class="s" style="background:var(--bg)">
+  <div style="display:flex;align-items:center;padding:12px 16px;gap:12px"><button class="bkb" onclick="go(2)">‹</button><div style="flex:1"></div><button class="cl" onclick="go(0)">✕</button></div>
+  <div class="pb"><div class="pf" style="width:18%"></div></div>
+  <div class="pg">
+    <div class="an"><div class="tt">Confirma tus datos</div><div class="st">Revisa que tu información esté correcta. Puedes editarla si es necesario.</div></div>
+    <div class="cd an1" id="s3-card">
+      <div style="display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--bd);margin-bottom:16px">
+        <div style="width:48px;height:48px;border-radius:50%;background:var(--bl);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:18px;font-weight:600;color:var(--b)">L</span></div>
+        <div style="font-size:17px;font-weight:600;color:var(--ts);line-height:1.3">Lucho Andrés<br>Velasco Rodriguez</div>
+      </div>
+      <div id="s3-view">
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t)">Cédula</span><span style="font-size:14px;font-weight:500;color:var(--ts)">1234567890</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t)">Número celular</span><span id="s3-view-phone" style="font-size:14px;font-weight:500;color:var(--ts)">(320) 123 4567</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t)">Correo electrónico</span><span id="s3-view-email" style="font-size:14px;font-weight:500;color:var(--ts)">lucho@correo.com</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t)">Género</span><span id="s3-view-gender" style="font-size:14px;font-weight:500;color:var(--ts)">Masculino</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t)">Ciudad expedición cédula</span><span id="s3-view-city" style="font-size:14px;font-weight:500;color:var(--ts)">Bogotá</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t)">Fecha expedición cédula</span><span id="s3-view-date" style="font-size:14px;font-weight:500;color:var(--ts)">12/03/2005</span></div>
+        </div>
+        <button onclick="s3EditMode(true)" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--bl);color:var(--b);border:none;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer">✏️ Editar información</button>
+      </div>
+      <div id="s3-edit" style="display:none">
+        <div style="font-size:12px;color:var(--tw);margin-bottom:14px">Nombre y cédula no pueden ser modificados.</div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:16px">
+          <div class="ig"><label class="il">Número celular</label><div class="iw"><input id="s3-phone" class="if" value="(320) 123 4567"></div></div>
+          <div class="ig"><label class="il">Correo electrónico</label><div class="iw"><input id="s3-email" class="if" value="lucho@correo.com"></div></div>
+          <div class="ig"><label class="il">Género</label><div class="sw"><select id="s3-gender" class="sf"><option value="Masculino" selected>Masculino</option><option value="Femenino">Femenino</option><option value="No binario">No binario</option><option value="Prefiero no decir">Prefiero no decir</option></select><span class="sa">▾</span></div></div>
+          <div class="ig"><label class="il">Ciudad expedición cédula</label><div class="iw"><input id="s3-city" class="if" value="Bogotá"></div></div>
+          <div class="ig"><label class="il">Fecha expedición cédula</label><div class="iw"><input id="s3-date" class="if" type="date" value="2005-03-12"></div></div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button onclick="s3SaveEdit()" style="flex:1;padding:12px;background:var(--b);color:#fff;border:none;border-radius:var(--rs);font-size:15px;font-weight:600;cursor:pointer">Guardar cambios</button>
+          <button onclick="s3EditMode(false)" style="padding:12px 16px;background:var(--bgs);color:var(--t);border:none;border-radius:var(--rs);font-size:15px;font-weight:600;cursor:pointer">Cancelar</button>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--tw);line-height:1.4">Al completar el registro esta información será guardada en tu cuenta. Tu nombre y cédula no podrán ser modificados. Los datos de contacto pueden ser modificados a través de nuestra línea de atención.</div>
+  </div>
+  <div class="bt"><button class="bp" id="s3-bt" onclick="go(4)">Continuar</button></div>
+</div>
+
+
+<!-- s4: PEP -->
+<div id="s4" class="s" style="background:var(--bg)">
+  <div class="hdr"><div class="hr"><button class="bk" onclick="go(3)">←</button></div><div class="pb"><div class="pf" style="width:25%"></div></div></div>
+  <div class="pg">
+    <div class="an"><div style="display:flex;align-items:center;gap:8px"><div class="tt">Persona políticamente expuesta</div><span style="color:var(--b);font-size:20px;cursor:pointer" onclick="showD('pep-m')">ℹ️</span></div><div class="st">Responde las siguientes preguntas para continuar.</div></div>
+    <div style="display:flex;flex-direction:column;gap:20px" class="an1">
+      <div><div style="font-size:14px;font-weight:500;color:var(--ts);margin-bottom:10px">¿Eres una persona políticamente expuesta (PEP)?</div><div style="display:flex;flex-direction:column;gap:8px"><button class="ro" onclick="selR(this,'q1')"><div class="rd"><div class="ri"></div></div><span class="rl">Sí</span></button><button class="ro" onclick="selR(this,'q1')"><div class="rd"><div class="ri"></div></div><span class="rl">No</span></button></div></div>
+      <div><div style="font-size:14px;font-weight:500;color:var(--ts);margin-bottom:10px">¿Administras recursos públicos?</div><div style="display:flex;flex-direction:column;gap:8px"><button class="ro" onclick="selR(this,'q2')"><div class="rd"><div class="ri"></div></div><span class="rl">Sí</span></button><button class="ro" onclick="selR(this,'q2')"><div class="rd"><div class="ri"></div></div><span class="rl">No</span></button></div></div>
+    </div>
+  </div>
+  <div class="bt"><button class="bp" id="pep-bt" disabled onclick="go(13)">Continuar</button></div>
+  <!-- PEP Info Modal -->
+  <div id="pep-m" class="dov" onclick="hideD('pep-m')"><div class="dsh" onclick="event.stopPropagation()" style="border-radius:var(--r);margin:auto 16px;max-height:none">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button style="width:28px;height:28px;border-radius:50%;background:var(--bgs);border:none;font-size:12px;color:var(--t)" onclick="hideD('pep-m')">✕</button></div>
+    <div class="tt" style="font-size:20px;margin-bottom:12px">¿Qué es una Persona Expuesta Políticamente?</div>
+    <div style="font-size:14px;color:var(--t);line-height:1.5;margin-bottom:16px">Una Persona Expuesta Políticamente (PEP) es un servidor público o particular con funciones de:</div>
+    <ul style="font-size:14px;color:var(--t);line-height:1.6;padding-left:20px;margin-bottom:16px"><li>Expedir normas o regulaciones.</li><li>Dirigir instituciones o formular políticas.</li><li>Manejar bienes, dineros o recursos públicos.</li><li>Administrar justicia o imponer sanciones.</li></ul>
+    <div style="font-size:14px;color:var(--t);margin-bottom:20px">Para más detalles, <u style="color:var(--b);font-weight:600">consulta la normativa vigente acá</u> o contacta a soporte.</div>
+    <button class="bo" style="margin-bottom:10px" onclick="hideD('pep-m')">Contactar a soporte</button>
+    <button class="bp" onclick="hideD('pep-m')">Entiendo</button>
+  </div></div>
+</div>
+
+
+<!-- s5: ECONOMIC ACTIVITY -->
+<div id="s5" class="s" style="background:var(--bg)">
+  <div class="hdr"><div class="hr"><button class="bk" onclick="go(13)">←</button></div><div class="pb"><div class="pf" style="width:35%"></div></div></div>
+  <div class="pg">
+    <div class="an"><div class="tt">Actividad económica</div><div class="st">Como parte de la normativa financiera necesitamos conocer tu actividad económica para conocer tu perfil financiero.</div></div>
+    <div class="g2 an1">
+      <button class="ac" onclick="selA(this)"><span style="font-size:28px">💼</span><span style="font-size:14px;font-weight:500;color:var(--ts)">Empleado</span></button>
+      <button class="ac" onclick="selA(this)"><span style="font-size:28px">📋</span><span style="font-size:14px;font-weight:500;color:var(--ts)">Otro</span></button>
+      <button class="ac" onclick="selA(this)"><span style="font-size:28px">🎓</span><span style="font-size:14px;font-weight:500;color:var(--ts)">Estudiante</span></button>
+      <button class="ac" onclick="selA(this)"><span style="font-size:28px">🏖️</span><span style="font-size:14px;font-weight:500;color:var(--ts)">Pensionados</span></button>
+      <button class="ac" onclick="selA(this)"><span style="font-size:28px">🏠</span><span style="font-size:14px;font-weight:500;color:var(--ts)">Cuidado del hogar</span></button>
+      <button class="ac" onclick="selA(this)"><span style="font-size:28px">📊</span><span style="font-size:14px;font-weight:500;color:var(--ts)">Rentista de capital</span></button>
+    </div>
+  </div>
+  <div class="bt"><button class="bp" id="act-bt" disabled onclick="go(6)">Continuar</button></div>
+</div>
+
+
+<!-- s6: FINANCIAL INFO -->
+<div id="s6" class="s" style="background:var(--bg)">
+  <div style="display:flex;align-items:center;padding:12px 16px;gap:12px"><button class="bkb" onclick="go(5)">‹</button><div style="flex:1"></div><button class="cl" onclick="go(0)">✕</button></div>
+  <div class="pb"><div class="pf" style="width:45%"></div></div>
+  <div class="pg">
+    <div class="an"><div class="tt">Ingresos y egresos mensuales</div><div class="st">Como parte de la normativa financiera necesitamos conocer tu actividad económica para conocer tu perfil financiero.</div></div>
+    <div style="display:flex;flex-direction:column;gap:16px" class="an1">
+      <div class="ig"><label class="il">Ingresos mensuales promedio*</label><div class="iw"><span class="ip">$</span><input class="if" placeholder="0" oninput="chkFin()"></div></div>
+      <div class="ig"><label class="il">Gastos mensuales promedio*</label><div class="iw"><span class="ip">$</span><input class="if" placeholder="0" oninput="chkFin()"></div></div>
+    </div>
+    <div style="font-size:12px;color:var(--tw);line-height:1.4" class="an2">Completa los campos obligatorios marcados con el * para continuar.</div>
+  </div>
+  <div class="bt"><button class="bp" id="fin-bt" disabled onclick="go(7)">Continuar</button></div>
+</div>
+
+
+<!-- s7: RESIDENCE INFO -->
+<div id="s7" class="s" style="background:var(--bg)">
+  <div style="display:flex;align-items:center;padding:12px 16px;gap:12px"><button class="bkb" onclick="go(6)">‹</button><div style="flex:1"></div><button class="cl" onclick="go(0)">✕</button></div>
+  <div class="pb"><div class="pf" style="width:55%"></div></div>
+  <div class="pg">
+    <div class="an"><div class="tt">Dirección de residencia</div><div class="st">Por regulación, debemos conocer la residencia fiscal de nuestros clientes. Cuéntanos dónde vives.</div></div>
+    <div style="display:flex;flex-direction:column;gap:16px" class="an1">
+      <div class="ig"><label class="il">Departamento*</label><div class="sw"><select class="sf" onchange="chkRes()"><option value="">Selecciona un departamento</option><option>Cundinamarca</option><option>Antioquia</option><option>Valle del Cauca</option></select><span class="sa">▾</span></div></div>
+      <div class="ig"><label class="il">Municipio*</label><div class="sw"><select class="sf" onchange="chkRes()"><option value="">Primero selecciona un departamento</option><option>Bogotá D.C</option><option>Soacha</option></select><span class="sa">▾</span></div></div>
+      <div class="ig"><label class="il">Dirección*</label><div class="iw"><input class="if" placeholder="Calle, Carrera, Avenida, Diagonal" oninput="chkRes()"></div></div>
+      <div class="ig"><label class="il">Información adicional</label><div class="iw"><input class="if" placeholder="Conjunto, Interior 1 Apartamento 2"></div></div>
+    </div>
+    <div style="font-size:12px;color:var(--tw);line-height:1.4">Completa los campos obligatorios marcados con el * para continuar.</div>
+  </div>
+  <div class="bt"><button class="bp" id="res-bt" disabled onclick="go(8)">Continuar</button></div>
+</div>
+
+
+<!-- s8: RESIDENCE CONFIRM? -->
+<div id="s8" class="s" style="background:var(--bg)">
+  <div style="display:flex;align-items:center;padding:12px 16px;gap:12px"><button class="bkb" onclick="go(7)">‹</button><div style="flex:1"></div><button class="cl" onclick="go(0)">✕</button></div>
+  <div class="pb"><div class="pf" style="width:62%"></div></div>
+  <div class="pg">
+    <div class="an"><div class="tt">¿Es una de estas?</div><div class="st">Para asegurarnos de tener la dirección correcta, selecciona una de las siguientes opciones.</div></div>
+    <div class="an1">
+      <div class="al" onclick="go(9)"><div><div style="font-size:15px;font-weight:500;color:var(--ts)">Calle 141 #11-41</div><div style="font-size:13px;color:var(--t);margin-top:2px">Cundinamarca - Bogotá</div></div><span style="color:var(--tw);font-size:20px">→</span></div>
+      <div class="al" onclick="go(9)"><div><div style="font-size:15px;font-weight:500;color:var(--ts)">Calle 140 #11-40</div><div style="font-size:13px;color:var(--t);margin-top:2px">Cundinamarca - Bogotá</div></div><span style="color:var(--tw);font-size:20px">→</span></div>
+      <div class="al" onclick="go(9)"><div><div style="font-size:15px;font-weight:500;color:var(--ts)">Calle 140 #11-41</div><div style="font-size:13px;color:var(--t);margin-top:2px">Cundinamarca - Bogotá</div></div><span style="color:var(--tw);font-size:20px">→</span></div>
+      <div class="al" onclick="go(9)"><div><div style="font-size:15px;font-weight:500;color:var(--ts)">Calle 140 #11-41</div><div style="font-size:13px;color:var(--t);margin-top:2px">Cundinamarca - Bogotá</div></div><span style="color:var(--tw);font-size:20px">→</span></div>
+      <div class="al" onclick="go(9)"><div><div style="font-size:15px;font-weight:500;color:var(--ts)">No es ninguna de las opciones</div></div><span style="color:var(--tw);font-size:20px">→</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- s9: RESIDENCE CONFIRMATION -->
+<div id="s9" class="s" style="background:var(--bg)">
+  <div style="display:flex;align-items:center;padding:12px 16px;gap:12px"><button class="bkb" onclick="go(8)">‹</button><div style="flex:1"></div><button class="cl" onclick="go(0)">✕</button></div>
+  <div class="pb"><div class="pf" style="width:68%"></div></div>
+  <div class="pg">
+    <div class="an"><div style="width:48px;height:48px;border-radius:var(--rs);border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;margin-bottom:8px"><span style="font-size:20px">📍</span></div>
+    <div class="tt">Confirma o edita tu dirección de residencia</div></div>
+    <div class="an1" style="display:flex;flex-direction:column;gap:6px">
+      <div style="font-size:15px;font-weight:500;color:var(--ts)">Calle 141 #11-41</div>
+      <div style="font-size:14px;color:var(--t)">Conjunto residencial cedros Interior 5 - apartamento 806</div>
+      <div style="font-size:14px;color:var(--t)">Cundinamarca - Bogotá</div>
+    </div>
+    <div style="flex:1"></div>
+    <button class="gh" style="color:var(--b)" onclick="go(7)">Editar dirección</button>
+  </div>
+  <div class="bt"><button class="bp" onclick="go(10)">Continuar</button></div>
+</div>
+
+
+<!-- s10: PROCESSING -->
+<div id="s10" class="s" style="background:var(--bg)">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;gap:24px">
+    <div style="width:56px;height:56px;border-radius:50%;background:var(--bl);display:flex;align-items:center;justify-content:center" class="an"><span style="font-size:24px;font-weight:700;color:var(--b)">A</span></div>
+    <div style="text-align:center" class="an1"><div style="font-size:22px;font-weight:700;color:var(--ts);letter-spacing:-.44px">Seguimos procesando</div><div style="font-size:15px;color:var(--t);margin-top:8px;line-height:1.5">El proceso está tomando más tiempo de lo habitual. Permanece en la app y no la cierres.</div></div>
+  </div>
+  <div style="margin:0 16px 32px;padding:16px;background:var(--w);border-radius:var(--r);border:1px solid var(--bd);display:flex;align-items:flex-start;gap:12px">
+    <span style="font-size:24px">👥</span>
+    <div><div style="font-size:14px;font-weight:600;color:var(--ts)">No cierres la app</div><div style="font-size:13px;color:var(--t);line-height:1.4;margin-top:2px">Permanece en la app mientras procesamos tu información. Puede tardar hasta 5 minutos.</div></div>
+  </div>
+</div>
+
+
+<!-- s11: IDV SUCCESS -->
+<div id="s11" class="s" style="background:var(--bg)">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;gap:24px;text-align:center">
+    <div style="width:72px;height:72px;border-radius:50%;border:3px solid var(--ts);display:flex;align-items:center;justify-content:center" class="an"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#121d28" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <div class="an1"><div style="font-size:24px;font-weight:700;color:var(--ts);letter-spacing:-.48px">Identidad validada</div><div style="font-size:16px;color:var(--t);margin-top:12px;line-height:1.5">Ahora puedes continuar tus compras con Addi.</div></div>
+  </div>
+  <div class="bt"><button class="bp" onclick="go(12)">Continuar</button></div>
+</div>
+
+
+<!-- s12: HOME (from Figma) -->
+<div id="s12" class="s" style="background:var(--w)">
+  <!-- Blue curved bg -->
+  <div style="position:absolute;top:0;left:0;right:0;height:253px;background:var(--bl);z-index:0"></div>
+  <div style="position:relative;z-index:1;display:flex;flex-direction:column;height:100%">
+  <!-- Search bar (card style) -->
+  <div style="padding:12px 16px 8px;display:flex;align-items:center;gap:8px">
+    <div style="flex:1;display:flex;align-items:center;gap:8px;padding:4px;background:var(--bg);border-radius:var(--r);box-shadow:0 1px 0 rgba(0,0,0,.01),0 2px 3px rgba(0,0,0,.07),0 4px 4px rgba(41,53,65,.03)">
+      <div style="flex:1;display:flex;align-items:center;gap:4px;padding:8px 12px;background:#eff3f7;border-radius:var(--rs)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a8b2ba" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span style="font-size:14px;font-weight:500;color:var(--tw)">Buscar en el marketplace</span></div>
+      <div style="position:relative;width:40px;height:40px;border-radius:var(--rs);background:var(--bl);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <div style="position:absolute;top:-6px;right:-4px;width:20px;height:20px;border-radius:50%;background:var(--b);border:2px solid #fff;display:flex;align-items:center;justify-content:center"><span style="font-size:12px;font-weight:700;color:#fff">3</span></div>
+      </div>
+    </div>
+  </div>
+  <!-- Greeting -->
+  <div style="padding:8px 16px 16px;display:flex;align-items:center;gap:12px">
+    <div style="position:relative">
+      <div style="width:48px;height:48px;border-radius:var(--rs);background:var(--bg);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center"><span style="font-size:18px;font-weight:600;color:var(--ts)">EM</span></div>
+      <div style="position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:#ffcd43;border:2px solid var(--bg);display:flex;align-items:center;justify-content:center"><span style="font-size:12px;font-weight:500;color:var(--ts)">!</span></div>
+    </div>
+    <div style="flex:1"><span style="font-size:16px;color:var(--t)">Buenas tardes,</span><br><span style="font-size:22px;font-weight:600;color:var(--ts);letter-spacing:-0.22px">Lucho Andrés</span></div>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a8b2ba" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </div>
+  <!-- Scrollable content -->
+  <div style="flex:1;overflow-y:auto;background:var(--w);border-radius:24px 24px 0 0">
+    <div style="padding:20px 16px 16px;display:flex;flex-direction:column;gap:16px">
+      <!-- Congrats banner -->
+      <div style="background:linear-gradient(135deg,#dcfce7 0%,#e6f5ff 100%);border-radius:var(--r);padding:16px;display:flex;align-items:flex-start;gap:12px;border:1px solid #bbf7d0">
+        <div style="width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:20px">🎉</span></div>
+        <div><div style="font-size:15px;font-weight:600;color:var(--ts)">¡Tu linea de credito esta activa!</div><div style="font-size:13px;color:var(--t);line-height:1.4;margin-top:4px">Tu migración a Addi CF fue exitosa. Ya puedes disfrutar de tu credito rotativo.</div></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:22px;font-weight:600;color:#000;letter-spacing:-0.22px">Tus productos</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a8b2ba" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <div style="display:flex;gap:12px">
+        <div style="flex:1;background:var(--w);border-radius:var(--r);padding:16px;box-shadow:0 2px 4px -1px rgba(41,53,65,.09),0 4px 8px -2px rgba(41,53,65,.06);position:relative">
+          <div style="font-size:14px;font-weight:600;color:var(--t)">Tus créditos</div>
+          <div style="font-size:22px;font-weight:600;color:var(--ts);margin-top:4px;letter-spacing:-0.22px">$ 700.000</div>
+          <div style="font-size:14px;color:var(--t);margin-top:2px">Disponible</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px">
+            <div style="padding:4px 8px;background:var(--b);border-radius:8px;display:flex;align-items:center;gap:2px"><span style="font-size:10px;font-weight:700;color:#fff">A</span></div>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a8b2ba" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+        <div style="flex:1;border:2px dashed #2c93ff;border-radius:var(--r);padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;position:relative;background:linear-gradient(180deg,#fff 0%,#f0f7ff 100%)">
+          <div style="position:absolute;top:10px;right:12px;padding:2px 8px;background:#2c93ff;border-radius:8px"><span style="font-size:12px;font-weight:500;color:#fff">CF</span></div>
+          <div style="display:flex;gap:-8px;margin-bottom:4px">
+            <div style="width:40px;height:40px;border-radius:var(--rs);background:var(--bl);border:1.5px solid #fff;display:flex;align-items:center;justify-content:center"><span style="font-size:16px">🐷</span></div>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:var(--t);text-align:center">Abre tu Cuenta de Ahorros</div>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a8b2ba" stroke-width="2" stroke-linecap="round" style="position:absolute;bottom:16px;right:12px"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+      <!-- Quick actions -->
+      <div style="display:flex;justify-content:center;gap:16px;padding:8px 0">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;width:63px"><div style="width:56px;height:56px;border-radius:var(--rs);background:var(--bl);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span style="font-size:14px;font-weight:600;color:var(--t)">Pagar</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;width:63px"><div style="width:56px;height:56px;border-radius:var(--rs);background:var(--bl);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2" stroke-linecap="round"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg></div><span style="font-size:14px;font-weight:600;color:var(--t)">Transferir</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;width:63px"><div style="width:56px;height:56px;border-radius:var(--rs);background:var(--bl);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2" stroke-linecap="round"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div><span style="font-size:14px;font-weight:600;color:var(--t)">Beneficios</span></div>
+      </div>
+      <!-- Marketplace -->
+      <div><div style="font-size:22px;font-weight:600;color:#000;letter-spacing:-0.22px">Compra en Addi</div><div style="font-size:12px;color:var(--t);margin-top:2px">Ofrecido por Adelante Soluciones Financieras S.A.S. <span style="color:var(--tw)">ℹ️</span></div></div>
+      <div style="display:flex;gap:12px">
+        <div style="flex:1;background:var(--bg);border:1.5px solid var(--bd);border-radius:var(--rs);padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4a5561" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg><span style="font-size:14px;font-weight:600;color:var(--t)">Marketplace</span></div>
+        <div style="flex:1;background:var(--bg);border:1.5px solid var(--bd);border-radius:var(--rs);padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4a5561" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2h-4v-6H9v6H5a2 2 0 01-2-2z"/></svg><span style="font-size:14px;font-weight:600;color:var(--t)">Tiendas</span></div>
+        <div style="flex:1;background:var(--bg);border:1.5px solid var(--bd);border-radius:var(--rs);padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4a5561" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span style="font-size:14px;font-weight:600;color:var(--t)">Categorías</span></div>
+      </div>
+      <!-- Cart banner -->
+      <div style="background:#ff8f43;border:1.5px solid #fff;border-radius:var(--rs);padding:16px 12px;overflow:hidden;position:relative;min-height:120px">
+        <div style="position:relative;z-index:1"><div style="font-size:22px;font-weight:600;color:#5c2500;letter-spacing:-0.22px;width:168px">Tu carrito te está llamando</div><div style="font-size:14px;color:#5c2500;opacity:.8;margin-top:8px;width:168px">Toca para finalizar tu compra.</div></div>
+      </div>
+      <!-- Legal -->
+      <div style="font-size:12px;color:var(--t);text-align:center;line-height:1.3;padding:0 8px">Tu cuenta de ahorros es ofrecida por Addi S.A. Compañía de Financiamiento (Addi CF). Adelante Soluciones Financieras S.A.S. actúa como corresponsal digital de Addi CF.</div>
+    </div>
+  </div>
+  <!-- Bottom nav -->
+  <div style="display:flex;justify-content:space-around;padding:12px 16px 8px;border-top:1px solid var(--bd);background:var(--w);flex-shrink:0;gap:8px">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="padding:4px 16px;background:var(--bl);border-radius:var(--rs)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1c67d8" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div><span style="font-size:12px;font-weight:500;color:var(--b);letter-spacing:-0.12px">Inicio</span></div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="padding:4px 16px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4a5561" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="14" r="7"/><path d="M8 14h8M15 11v6"/></svg></div><span style="font-size:12px;font-weight:500;color:var(--t);letter-spacing:-0.12px">Ahorros</span></div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="padding:4px 16px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4a5561" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span style="font-size:12px;font-weight:500;color:var(--t);letter-spacing:-0.12px">Créditos</span></div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="padding:4px 16px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4a5561" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/></svg></div><span style="font-size:12px;font-weight:500;color:var(--t);letter-spacing:-0.12px">Comprar</span></div>
+  </div>
+  <div style="height:24px;background:var(--w);display:flex;justify-content:center;padding-top:4px"><div style="width:134px;height:5px;border-radius:100px;background:#1c1c1c"></div></div>
+  </div>
+</div>
+
+
+
+<!-- s13: TAX DECLARATION (after PEP, matching KYC-home-banner flow) -->
+<div id="s13" class="s" style="background:var(--bg)">
+  <div class="hdr"><div class="hr"><button class="bk" onclick="go(4)">←</button></div><div class="pb"><div class="pf" style="width:30%"></div></div></div>
+  <div class="pg">
+    <div class="an"><div class="tt">¿Declaras impuestos fuera de Colombia?</div><div class="st">Para cumplir con la regulación financiera de Colombia, necesitamos confirmar si tienes obligaciones de impuestos en otros países. ¡Es un paso rápido y nos ayudas a mantener todo en orden!</div></div>
+    <div class="an1">
+      <div style="font-size:14px;font-weight:500;color:var(--ts);margin-bottom:10px">¿Declaras o pagas impuestos en un país diferente a Colombia?</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="ro" onclick="selR(this,'tx')"><div class="rd"><div class="ri"></div></div><span class="rl">Sí</span></button>
+        <button class="ro" onclick="selR(this,'tx')"><div class="rd"><div class="ri"></div></div><span class="rl">No</span></button>
+      </div>
+    </div>
+  </div>
+  <div class="bt"><button class="bp" id="tax-bt" disabled onclick="go(5)">Continuar</button></div>
+</div>
+
+<div id="dots"></div>
+
+<script>
+const screens=[0,1,2,3,4,13,5,6,7,8,9,10,11,12];let cur=0;const st={q1:0,q2:0,tx:0};
+const dE=document.getElementById('dots');
+for(let i=0;i<screens.length;i++){const d=document.createElement('div');d.className='dot';d.style.background=i===0?'#1c67d8':'rgba(255,255,255,.4)';d.onclick=(function(s){return()=>go(s)})(screens[i]);d.title='Screen '+screens[i];dE.appendChild(d)}
+function updD(){const ds=dE.children;for(let i=0;i<ds.length;i++){const a=screens[i]===cur;ds[i].style.background=a?'#1c67d8':'rgba(255,255,255,.4)';ds[i].style.width=a?'14px':'5px'}}
+function go(n){document.querySelectorAll('.s').forEach(s=>s.classList.remove('on'));document.getElementById('s'+n).classList.add('on');cur=n;updD();if(n===10)setTimeout(()=>go(11),3000)}
+function showD(id){document.getElementById(id).classList.add('show')}
+function hideD(id){document.getElementById(id).classList.remove('show')}
+function selR(el,g){const p=el.parentElement;p.querySelectorAll('.ro').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');st[g]=1;if(st.q1&&st.q2)document.getElementById('pep-bt').disabled=false;if(st.tx)document.getElementById('tax-bt').disabled=false}
+function selA(el){document.querySelectorAll('.ac').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');document.getElementById('act-bt').disabled=false}
+function chkFin(){const ins=document.querySelectorAll('#s6 .if');document.getElementById('fin-bt').disabled=!Array.from(ins).every(i=>i.value.trim().length>0)}
+function chkRes(){const sels=document.querySelectorAll('#s7 select');const inp=document.querySelector('#s7 input');const ok=Array.from(sels).every(s=>s.value!=='')&&inp&&inp.value.trim().length>0;document.getElementById('res-bt').disabled=!ok}
+function s3EditMode(on){document.getElementById('s3-view').style.display=on?'none':'block';document.getElementById('s3-edit').style.display=on?'block':'none'}
+function s3SaveEdit(){const g=document.getElementById('s3-gender').value;const c=document.getElementById('s3-city').value.trim();const d=document.getElementById('s3-date').value;const ph=document.getElementById('s3-phone').value.trim();const em=document.getElementById('s3-email').value.trim();document.getElementById('s3-view-gender').textContent=g;document.getElementById('s3-view-city').textContent=c||'—';document.getElementById('s3-view-phone').textContent=ph||'—';document.getElementById('s3-view-email').textContent=em||'—';if(d){const[y,m,dd]=d.split('-');document.getElementById('s3-view-date').textContent=dd+'/'+m+'/'+y;}s3EditMode(false)}
+function toggleCb(cid,bid){const c=document.getElementById(cid);const b=document.getElementById(bid);const ck=c.classList.toggle('ck');c.querySelector('svg').style.display=ck?'block':'none';b.disabled=!ck}
+document.addEventListener('keydown',e=>{const i=screens.indexOf(cur);if(e.key==='ArrowRight'&&i<screens.length-1)go(screens[i+1]);if(e.key==='ArrowLeft'&&i>0)go(screens[i-1])});
+</script>
+</body>
+</html>
