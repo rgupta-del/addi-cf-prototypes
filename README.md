@@ -1,18 +1,37 @@
-# Addi CF Migration — Prototypes
+# Addi — Migration Prototypes
 
-Interactive HTML prototypes for the Addi CF bank migration — KYC, IDV & T&C collection flows.
+Interactive single-file HTML prototypes for the Addi migration KYC and onboarding flows. All prototypes are mobile-framed (390px) and navigable via tap or arrow keys.
+
+---
 
 ## Prototypes
 
-| File | Description |
-|------|-------------|
-| `prototypes-v3/originations-banner-to-tnc.html` | Originations flow — Banner to prompt TYC (5 screens) |
-| `prototypes-v3/loan-proposal-with-tnc.html` | Loan proposal with T&C acceptance |
-| `prototypes-v3/loan-proposal-without-tnc.html` | Loan proposal without T&C |
-| `prototypes-v3/addi-variant-no-idv.html` | KYC flow — No IDV required, with T&C (Segment A) |
-| `prototypes-v3/addi-variant-no-idv-no-tc.html` | KYC flow — No IDV, no T&C |
-| `prototypes-v3/KYC-home-banner.html` | Home banner — KYC collection flow |
+### KYC Home Banner + Soft IDV
+Full KYC flow triggered from a home banner. Includes soft identity verification, PEP declaration, tax declaration, and economic activity screens.
+[View prototype](https://rgupta-del.github.io/addi-cf-prototypes/KYC-home-banner.html)
 
-## GitHub Pages
+---
 
-Live prototypes are hosted at: https://rgupta-del.github.io/addi-cf-prototypes/prototypes-v3/
+### KYC TC App Login
+KYC flow with T&C acceptance at login. Includes the terms & conditions screen (Cupo feature cards), full KYC flow with identity verification, PEP declaration, and tax declaration.
+[View prototype](https://rgupta-del.github.io/addi-cf-prototypes/KYC-TC-App-Login.html)
+
+---
+
+### Originations Banner to T&C
+Originations flow starting from a home banner, leading through the loan proposal and T&C acceptance screens.
+[View prototype](https://rgupta-del.github.io/addi-cf-prototypes/originations-banner-to-tnc.html)
+
+---
+
+### Email KYC Campaign
+Email campaign prototype designed to drive KYC completion. Shows a mobile inbox, full email render with CTA, and an app deep-link landing screen.
+[View prototype](https://rgupta-del.github.io/addi-cf-prototypes/email-kyc-campaign.html)
+
+---
+
+## Navigation
+All prototypes support:
+- **Tap / click** to advance through screens
+- **Arrow keys** (← →) to move between screens
+- **Dot indicators** at the bottom to jump to any screen
