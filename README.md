@@ -1,37 +1,31 @@
-# Addi — Migration Prototypes
+# Addi Prototypes
 
-Interactive single-file HTML prototypes for the Addi migration KYC and onboarding flows. All prototypes are mobile-framed (390px) and navigable via tap or arrow keys.
+Live prototypes hosted on GitHub Pages for the Bank Migration project.
 
 ---
 
 ## Prototypes
 
-### KYC Home Banner + Soft IDV
-Full KYC flow triggered from a home banner. Includes soft identity verification, PEP declaration, tax declaration, and economic activity screens.
-[View prototype](https://rgupta-del.github.io/addi-cf-prototypes/KYC-home-banner.html)
+### 1. KYC Home Banner + Soft IDV
+Flow starting from a home banner, through KYC with soft identity verification.
+🔗 [View prototype](https://rgupta-del.github.io/addi-cf-prototypes/KYC-home-banner.html)
+
+### 2. KYC TC App Login
+KYC flow triggered from the app login, including T&C acceptance.
+🔗 [View prototype](https://rgupta-del.github.io/addi-cf-prototypes/KYC-TC-App-Login.html)
+
+### 3. Originations Banner to T&C
+Flow from an originations banner entry point through to T&C acceptance.
+🔗 [View prototype](https://rgupta-del.github.io/addi-cf-prototypes/originations-banner-to-tnc.html)
+
+### 4. Email KYC Campaign
+KYC flow triggered from an email campaign, including inbox and email screens.
+🔗 [View prototype](https://rgupta-del.github.io/addi-cf-prototypes/email-kyc-campaign.html)
+
+### 5. Battlepass — KYC + T&C Cupo Boost
+Gamified battlepass mechanic: customers complete two challenges (accept T&C + update KYC info) to unlock a +$1.000.000 cupo boost.
+🔗 [View prototype](https://rgupta-del.github.io/addi-cf-prototypes/battlepass-kyc-boost.html)
 
 ---
 
-### KYC TC App Login
-KYC flow with T&C acceptance at login. Includes the terms & conditions screen (Cupo feature cards), full KYC flow with identity verification, PEP declaration, and tax declaration.
-[View prototype](https://rgupta-del.github.io/addi-cf-prototypes/KYC-TC-App-Login.html)
-
----
-
-### Originations Banner to T&C
-Originations flow starting from a home banner, leading through the loan proposal and T&C acceptance screens.
-[View prototype](https://rgupta-del.github.io/addi-cf-prototypes/originations-banner-to-tnc.html)
-
----
-
-### Email KYC Campaign
-Email campaign prototype designed to drive KYC completion. Shows a mobile inbox, full email render with CTA, and an app deep-link landing screen.
-[View prototype](https://rgupta-del.github.io/addi-cf-prototypes/email-kyc-campaign.html)
-
----
-
-## Navigation
-All prototypes support:
-- **Tap / click** to advance through screens
-- **Arrow keys** (← →) to move between screens
-- **Dot indicators** at the bottom to jump to any screen
+*Prototypes are for internal design review only.*
