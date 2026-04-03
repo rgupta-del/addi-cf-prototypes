@@ -245,7 +245,7 @@ button{font-family:'Outfit',sans-serif;cursor:pointer}
       <div><div style="font-size:14px;font-weight:500;color:var(--ts);margin-bottom:10px">¿Administras recursos públicos?</div><div style="display:flex;flex-direction:column;gap:8px"><button class="ro" onclick="selR(this,'q2')"><div class="rd"><div class="ri"></div></div><span class="rl">Sí</span></button><button class="ro" onclick="selR(this,'q2')"><div class="rd"><div class="ri"></div></div><span class="rl">No</span></button></div></div>
     </div>
   </div>
-  <div class="bt"><button class="bp" id="pep-bt" disabled onclick="go(5)">Continuar</button></div>
+  <div class="bt"><button class="bp" id="pep-bt" disabled onclick="go(11)">Continuar</button></div>
   <!-- PEP Info Modal -->
   <div id="pep-m" class="dov" onclick="hideD('pep-m')"><div class="dsh" onclick="event.stopPropagation()" style="border-radius:var(--r);margin:auto 16px;max-height:none">
     <div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button style="width:28px;height:28px;border-radius:50%;background:var(--bgs);border:none;font-size:12px;color:var(--t)" onclick="hideD('pep-m')">✕</button></div>
@@ -259,9 +259,26 @@ button{font-family:'Outfit',sans-serif;cursor:pointer}
 </div>
 
 
+<!-- s11: TAX DECLARATION (after PEP) -->
+<div id="s11" class="s" style="background:var(--bg)">
+  <div class="hdr"><div class="hr"><button class="bk" onclick="go(4)">←</button></div><div class="pb"><div class="pf" style="width:30%"></div></div></div>
+  <div class="pg">
+    <div class="an"><div class="tt">¿Declaras impuestos fuera de Colombia?</div><div class="st">Para cumplir con la regulación financiera de Colombia, necesitamos confirmar si tienes obligaciones de impuestos en otros países. ¡Es un paso rápido y nos ayudas a mantener todo en orden!</div></div>
+    <div class="an1">
+      <div style="font-size:14px;font-weight:500;color:var(--ts);margin-bottom:10px">¿Declaras o pagas impuestos en un país diferente a Colombia?</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="ro" onclick="selR(this,'tx')"><div class="rd"><div class="ri"></div></div><span class="rl">Sí</span></button>
+        <button class="ro" onclick="selR(this,'tx')"><div class="rd"><div class="ri"></div></div><span class="rl">No</span></button>
+      </div>
+    </div>
+  </div>
+  <div class="bt"><button class="bp" id="tax-bt" disabled onclick="go(5)">Continuar</button></div>
+</div>
+
+
 <!-- s5: ECONOMIC ACTIVITY -->
 <div id="s5" class="s" style="background:var(--bg)">
-  <div class="hdr"><div class="hr"><button class="bk" onclick="go(4)">←</button></div><div class="pb"><div class="pf" style="width:35%"></div></div></div>
+  <div class="hdr"><div class="hr"><button class="bk" onclick="go(11)">←</button></div><div class="pb"><div class="pf" style="width:35%"></div></div></div>
   <div class="pg">
     <div class="an"><div class="tt">Actividad económica</div><div class="st">Como parte de la normativa financiera necesitamos conocer tu actividad económica para conocer tu perfil financiero.</div></div>
     <div class="g2 an1">
@@ -454,14 +471,14 @@ button{font-family:'Outfit',sans-serif;cursor:pointer}
 <div id="dots"></div>
 
 <script>
-const screens=[0,1,3,4,5,6,7,8,9,10,15];let cur=0;const st={q1:0,q2:0};
+const screens=[0,1,3,4,11,5,6,7,8,9,10,15];let cur=0;const st={q1:0,q2:0,tx:0};
 const dE=document.getElementById('dots');
 for(let i=0;i<screens.length;i++){const d=document.createElement('div');d.className='dot';d.style.background=i===0?'#1c67d8':'rgba(255,255,255,.4)';d.onclick=(function(s){return()=>go(s)})(screens[i]);d.title='Screen '+screens[i];dE.appendChild(d)}
 function updD(){const ds=dE.children;for(let i=0;i<ds.length;i++){const a=screens[i]===cur;ds[i].style.background=a?'#1c67d8':'rgba(255,255,255,.4)';ds[i].style.width=a?'14px':'5px'}}
 function go(n){document.querySelectorAll('.s').forEach(s=>s.classList.remove('on'));document.getElementById('s'+n).classList.add('on');cur=n;updD();if(n===10)setTimeout(()=>go(15),2500)}
 function showD(id){document.getElementById(id).classList.add('show')}
 function hideD(id){document.getElementById(id).classList.remove('show')}
-function selR(el,g){const p=el.parentElement;p.querySelectorAll('.ro').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');st[g]=1;if(st.q1&&st.q2)document.getElementById('pep-bt').disabled=false}
+function selR(el,g){const p=el.parentElement;p.querySelectorAll('.ro').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');st[g]=1;if(st.q1&&st.q2)document.getElementById('pep-bt').disabled=false;if(st.tx)document.getElementById('tax-bt').disabled=false}
 function selA(el){document.querySelectorAll('.ac').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');document.getElementById('act-bt').disabled=false}
 function chkFin(){const ins=document.querySelectorAll('#s6 .if');document.getElementById('fin-bt').disabled=!Array.from(ins).every(i=>i.value.trim().length>0)}
 function chkRes(){const sels=document.querySelectorAll('#s7 select');const inp=document.querySelector('#s7 input');const ok=Array.from(sels).every(s=>s.value!=='')&&inp&&inp.value.trim().length>0;document.getElementById('res-bt').disabled=!ok}
